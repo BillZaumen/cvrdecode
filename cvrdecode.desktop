@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=CVRDecode
+GenericName=Decode California Digital COVID-19 Vaccine Records
+Comment= Decode and print California Digital COVID-19 vaccine records
+Exec=cvrdecode
+TryExec=cvrdecode
+Terminal=false
+Type=Application
+Icon=/usr/share/icons/hicolor/scalable/apps/cvrdecode.svg
+Categories=Utility;
+StartupNotify=false

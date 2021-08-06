@@ -1,0 +1,5 @@
+cvrdecode (0.5) unstable; urgency=low
+
+  * Created the initial version and a man page.
+
+ --  Bill Zaumen <bill.zaumen@gmail.com>  Wed, 04 Aug 2021 21:18:00 -0700
