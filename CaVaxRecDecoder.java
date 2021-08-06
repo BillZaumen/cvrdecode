@@ -130,7 +130,7 @@ import org.bzdev.util.JSUtilities;
  * a vaccine listed in that namespace. The codes seem to be non-negative
  * integers.  The web site
  * <A HREF="https://www.cdc.gov/vaccines/programs/iis/COVID-19-related-codes.html>
- *https://www.cdc.gov/vaccines/programs/iis/COVID-19-related-codes.html</A>
+ * https://www.cdc.gov/vaccines/programs/iis/COVID-19-related-codes.html</A>
  * has the vaccine codes (it lists CVX codes).
  * <P>
  * Because the COVID-19 pandemic should end once enough of the population

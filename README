@@ -1,0 +1,69 @@
+The program cvrdecode will store data from a collection of California
+digital vaccine records in a file or print it to standard output.
+
+With no arguments a simple GUI will walk the user through the process
+of generating the output file.  The GUI shows a table of buttons. The
+first two set an input directory and the output file. When one of
+these is set, the corresponding button changes color (to a pale
+yellow).  Both must be set to continue.  The 'Run' button will then be
+enabled so the output can be generated.  Before exiting, the user can
+click on a button to display a console (for error messages) or a
+button to display the table that was created. An "Exit" button
+terminates the program.
+
+Otherwise, cvrdecode works as a command-line program. The options are
+described in a manual page (cvrdecode.1).
+
+To compile, just type the command
+
+  make
+
+and to create a Debian package, type the command
+
+  make deb
+
+The file CaVaxRecDecoder.java contains comments outlining how to
+verify a digital signature and where to find some of the documentation
+(the specifications one will initially find in a Google search are
+lacking with regard to citations and some important details are
+assumed to be obvious, so it takes some time to generate a clear
+description of what to actually do).
+
+Debian packages needed for running and compiling:
+
+    openjdk-11-jdk
+    openjdk-11-jdk-headless
+    openjdk-11-jre
+    openjdk-11-jre-headless
+    inkscape-1.0.2-3ubuntu1  (version 1.0.2 & later OK)
+    libbzdev-java    (not yet publicly available)
+    libzxing-core-java
+    libzxing-java
+    libzxing-javase-java
+
+  The program inkscape is used to generate icons of various sizes.
+  The icon is in cvrdecode.svg and inkscape can convert that to PNG
+  files of various sizes. The libzxing packages have a dependency on
+  the package libjcommander-java.  The jar file from
+  libjcommander-java does not appear to be needed at compile time or
+  run time given the zxing classes cvrdecode uses.
+
+  Two jar files provided by libbzdev-java are needed:
+
+    libbzdev-base.jar  (for generating CSV files and parsing JSON)
+    libbzdev-desktop.jar (for a GUI component for tables)
+
+  Two jar files provided by the libzxing packages are needed:
+    core.jar   (QR code processing)
+    javase.jar (QR code processing)
+
+  The module org.bzdev.desktop is dependent on the modules
+  org.bzdev.base and org.bzdev.graphics, which in turn is dependent on
+  org.bzdev.math and org.bzdev.obnaming, but the GUI component from
+  org.bzdev.desktop that is used by cvrdecode does not use any classes
+  from these additional modules.  As a result, cvrdecode does not use
+  Java modules - primarily to keep the number of jar files needed to a
+  minimum.
+
+To create a Debian package, the usual dpkg tools are needed including
+the fakeroot program from the package fakeroot.
