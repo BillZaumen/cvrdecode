@@ -585,10 +585,17 @@ public class CaVaxRecDecoder {
 
 		FileFilter filter1 = new FileFilter() {
 			public boolean accept(File f) {
-			    return f.isDirectory();
+			    if (f.isDirectory()) {
+				return f.canRead();
+			    } else {
+				String name = f.getName();
+				return (name.endsWith(".zip")
+					|| name.endsWith(".ZIP"))
+				    && f.canRead();
+			    }
 			}
 			public String getDescription() {
-			    return "Directory";
+			    return "Directory or ZIP file";
 			}
 		    };
 		String cdir = System.getProperty("user.dir");
@@ -597,7 +604,7 @@ public class CaVaxRecDecoder {
 		fc1.addChoosableFileFilter(filter1);
 		fc1.setAcceptAllFileFilterUsed(false);
 		fc1.setMultiSelectionEnabled(false);
-		fc1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc1.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fc1.setDialogTitle("cvrdecode: Set Directory");
 		fc1.setApproveButtonText("Set Input Directory");
 		FileNameExtensionFilter filter2 =
@@ -738,6 +745,7 @@ public class CaVaxRecDecoder {
      */
     public static void main(String argv[]) throws Exception {
 	boolean guimode = false;
+	ZipInputStream zis = null;
 
 	if (argv.length == 0) {
 	    startGUI();
@@ -748,19 +756,27 @@ public class CaVaxRecDecoder {
 		suffixSet.add(suffix);
 	    }
 	    ArrayList<String> list = new ArrayList<>(256);
-	    for (File f: target.listFiles()) {
-		String fname = f.getName();
-		int ind = fname.lastIndexOf(".");
-		if (ind == -1) continue;
-		String suffix = fname.substring(ind+1);
-		if (suffixSet.contains(suffix)) {
-		    list.add(f.getCanonicalPath());
+	    if (target.isDirectory()) {
+		for (File f: target.listFiles()) {
+		    String fname = f.getName();
+		    int ind = fname.lastIndexOf(".");
+		    if (ind == -1) continue;
+		    String suffix = fname.substring(ind+1);
+		    if (suffixSet.contains(suffix)) {
+			list.add(f.getCanonicalPath());
+		    }
+		}
+		argv = list.toArray(new String[list.size()]);
+	    } else {
+		try {
+		    zis = new ZipInputStream(new FileInputStream(target));
+		} catch (Exception ezip) {
+		    err.println("cvrdecode:input not a zip file?");
+		    err.flush();
+		    return;
 		}
 	    }
-	    argv = list.toArray(new String[list.size()]);
-	    
 	    guimode = true;
-	} else {
 	}
 
 	boolean showJSON = false;
@@ -795,8 +811,22 @@ public class CaVaxRecDecoder {
 		}
 	    }
 	    argv = alist.toArray(new String[alist.size()]);
+	} else if (argv.length > 0 && argv.length < 3 && argv[0].equals("-z")) {
+	    try {
+		zis = new ZipInputStream((argv.length == 1)? System.in:
+					 (argv[1].equals("-"))? System.in:
+					 new FileInputStream(argv[1]));
+	    } catch (Exception ezis) {
+		err.println("crvdecode: input not a ZIP file");
+		err.flush();
+		System.exit(1);
+	    }
 	} else if (argv.length > 0 && argv[0].equals("-v")) {
-	    if (argv.length != 2) {
+	    if (argv.length == 1) {
+		argv = new String[] {
+		    "-v", "-"
+		};
+	    } else if (argv.length != 2) {
 		err.println("cvrdecode: "
 				   + "only one file with -v is allowed");
 		err.flush();
@@ -821,98 +851,184 @@ public class CaVaxRecDecoder {
 	}
 	
 	boolean mayHaveOptions = true;
-	for (String arg: argv) {
-	    if (mayHaveOptions && arg.equals("--")) {
-		mayHaveOptions = false;
-		continue;
-	    } else if (mayHaveOptions && showJSON && arg.equals("-v")) {
-		if (uriMode) {
-		    err.println("cvrdecode: -v option not allowed "
-				       + "after -u option");
-		    err.flush();
-		    System.exit(1);
+	if (zis != null) {
+	    // image and shc files are taken from a zip file.
+	    ZipEntry entry = null;
+	    while ((entry = zis.getNextEntry()) != null) {
+		if (entry.isDirectory()) continue;
+		String arg = entry.getName();
+		long sz = entry.getSize();
+		uri = null;
+		byte[] bytes;
+		int offset = 0;
+		if (sz != -1) {
+		    if (sz > Integer.MAX_VALUE) {
+			err.println("cvrdecode: zip entry too large");
+			err.flush();
+			zis.closeEntry();
+			continue;
+		    }
+		    int size = (int) sz;
+		    bytes = new byte[size];
+		    while (offset < size) {
+			int len =  zis.read(bytes, offset, size-offset);
+			if (len == -1) {
+			    break;
+			}
+			offset += len;
+		    }
+		} else {
+		    bytes = new byte[4048];
+		    ByteArrayOutputStream bos =
+			new ByteArrayOutputStream(1<<18);
+		    int len;
+		    while ((len = zis.read(bytes, 0, 4048)) != -1) {
+			bos.write(bytes, 0, len);
+		    }
+		    bytes = bos.toByteArray();
+		    // In the other branch, offset is the total length
+		    // of the entry that was just read.
+		    offset = bytes.length;
 		}
-		continue;
-	    } else if (mayHaveOptions && uriMode && arg.equals("-u")) {
-		if (showJSON) {
-		    err.println("cvrdecode: -u option not allowed "
-				       + "after -v option");
-		    err.flush();
-		    System.exit(1);
+		if (arg.endsWith(".shc") || arg.endsWith(".SHC")) {
+		    uri = new String(bytes, 0, offset, "UTF-8").trim();
+		} else {
+		    // assume the entry is an image
+		    try {
+			InputStream in = new ByteArrayInputStream(bytes, 0,
+								  offset);
+			// Read the URI from an embedded QR code
+			BufferedImage bufferedImage = ImageIO.read(in);
+			LuminanceSource source = new
+			    BufferedImageLuminanceSource(bufferedImage);
+			BinaryBitmap bitmap =
+			    new BinaryBitmap(new HybridBinarizer(source));
+			uri = (new MultiFormatReader().decode(bitmap))
+			    .getText();
+		    } catch (Exception e) {
+			uri = null;
+		    }
+		    if (uri == null)  {
+			err.println("cvrdecode: zip entry not readable - "
+				    + arg);
+			err.flush();
+			zis.closeEntry();
+			continue;
+		    }
 		}
-		continue;
-	    } else if (mayHaveOptions && !arg.equals("-")
-		       && arg.startsWith("-")) {
-		    err.println("cvrdecode: " + arg + " option not allowed");
-		    err.flush();
-		    uri = null;	// to eliminate a compiler error
-		    System.exit(1);
-	    } else if (arg.endsWith(".shc") || arg.endsWith(".SHC")) {
-		mayHaveOptions = false;
 		try {
-		    uri = new
-			BufferedReader(new FileReader(arg,
-						      Charset.forName("UTF-8")),
-				       4096).readLine();
-		} catch (Exception ee) {
-		    uri = null;
-		}
-		if (uri == null) {
-		    err.println("cvrdecode: input not readable - \"" + arg
-				+ "\"");
-		    err.flush();
-		    if (showJSON) System.exit(1);
-		    continue;
-		}
-	    } else if (arg.startsWith("shc:/")) {
-		mayHaveOptions = false;
-		uri = arg;
-		arg = "shc:/..." + arg.substring(arg.length() - 24);
-	    } else {
-		mayHaveOptions = false;
-		try {
-		    InputStream in = (arg.equals("-"))? System.in:
-			new FileInputStream(arg);
-		    BufferedImage bufferedImage = ImageIO.read(in);
-		    LuminanceSource source = new
-			BufferedImageLuminanceSource(bufferedImage);
-		    BinaryBitmap bitmap =
-			new BinaryBitmap(new HybridBinarizer(source));
-		    uri = (new MultiFormatReader().decode(bitmap))
-			.getText();
+		    processSHC(arg, uri, false);
 		} catch (Exception e) {
-		    uri = null;
-		}
-		if (uri == null) {
-		    err.println("cvrdecode: input not readable - "
-				       + arg);
+		    err.println("cvrdecode: " + e.getMessage()
+				+ " - " + arg);
 		    err.flush();
-		    if (showJSON) System.exit(1);
+		    zis.closeEntry();
 		    continue;
 		}
-	    }
-	    if (uriMode) {
-		System.out.println(uri);
-		continue;
-	    }
-	    try {
-		processSHC(arg, uri, showJSON);
-	    } catch (Exception e) {
-		err.println("cvrdecode: " + e.getMessage()
-				   + " - " + arg);
-		err.flush();
-		if (showJSON) System.exit(1);
-		continue;
-	    }
-
-	    if (showJSON == false) {
 		String[] row = {familyName, givenNames, birthDate,
 		    (latest == null)? "[no date]": latest.toString(),
 		    full? "true": "false",
 		    valid? "true": "false",
-		    (guimode? new File(arg).getName(): arg)
+		    "zip: " + arg
 		};
 		list.add(row);
+		zis.closeEntry();
+	    }
+	} else {
+	    for (String arg: argv) {
+		if (mayHaveOptions && arg.equals("--")) {
+		    mayHaveOptions = false;
+		    continue;
+		} else if (mayHaveOptions && showJSON && arg.equals("-v")) {
+		    if (uriMode) {
+			err.println("cvrdecode: -v option not allowed "
+				    + "after -u option");
+			err.flush();
+			System.exit(1);
+		    }
+		    continue;
+		} else if (mayHaveOptions && uriMode && arg.equals("-u")) {
+		    if (showJSON) {
+			err.println("cvrdecode: -u option not allowed "
+				    + "after -v option");
+			err.flush();
+			System.exit(1);
+		    }
+		    continue;
+		} else if (mayHaveOptions && !arg.equals("-")
+			   && arg.startsWith("-")) {
+		    err.println("cvrdecode: " + arg + " option not allowed");
+		    err.flush();
+		    uri = null;	// to eliminate a compiler error
+		    System.exit(1);
+		} else if (arg.endsWith(".shc") || arg.endsWith(".SHC")) {
+		    mayHaveOptions = false;
+		    try {
+			uri = new
+			    BufferedReader(new FileReader(arg,
+							  Charset
+							  .forName("UTF-8")),
+					   4096).readLine();
+		    } catch (Exception ee) {
+			uri = null;
+		    }
+		    if (uri == null) {
+			err.println("cvrdecode: input not readable - \"" + arg
+				    + "\"");
+			err.flush();
+			if (showJSON) System.exit(1);
+			continue;
+		    }
+		} else if (arg.startsWith("shc:/")) {
+		    mayHaveOptions = false;
+		    uri = arg;
+		    arg = "shc:/..." + arg.substring(arg.length() - 24);
+		} else {
+		    mayHaveOptions = false;
+		    try {
+			InputStream in = (arg.equals("-"))? System.in:
+			    new FileInputStream(arg);
+			BufferedImage bufferedImage = ImageIO.read(in);
+			LuminanceSource source = new
+			    BufferedImageLuminanceSource(bufferedImage);
+			BinaryBitmap bitmap =
+			    new BinaryBitmap(new HybridBinarizer(source));
+			uri = (new MultiFormatReader().decode(bitmap))
+			    .getText();
+		    } catch (Exception e) {
+			uri = null;
+		    }
+		    if (uri == null) {
+			err.println("cvrdecode: input not readable - "
+				    + arg);
+			err.flush();
+			if (showJSON) System.exit(1);
+			continue;
+		    }
+		}
+		if (uriMode) {
+		    System.out.println(uri);
+		    continue;
+		}
+		try {
+		    processSHC(arg, uri, showJSON);
+		} catch (Exception e) {
+		    err.println("cvrdecode: " + e.getMessage()
+				+ " - " + arg);
+		    err.flush();
+		    if (showJSON) System.exit(1);
+		    continue;
+		}
+
+		if (showJSON == false) {
+		    String[] row = {familyName, givenNames, birthDate,
+			(latest == null)? "[no date]": latest.toString(),
+			full? "true": "false",
+			valid? "true": "false",
+			(guimode? new File(arg).getName(): arg)
+		    };
+		    list.add(row);
+		}
 	    }
 	}
 	if (showJSON == false && uriMode == false) {

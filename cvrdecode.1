@@ -6,17 +6,23 @@ cvrdecode \- extract data and verify a California digital vaccine record
 .B
 cvrdecode
 [\fI\,OPTION\/\fR] [\fI\,FILENAME\/\fR|\fI\,URI\/\fR]...
+.SH FLATPAK SYNOPSIS
+.B flatpack run org.bzdev.CVRDecode --help\fR|\fB-?
+.br
+.B flatpack run org.bzdev.CVRDecode
+[\fI\,OPTION\/\fR] [\fI\,FILENAME\/\fR|\fI\,URI\/\fR]...
 .SH DESCRIPTION
 .PP
-The program cvrdecode prints out information about a California
-digital vaccine record.  The California Department of Public Health is
-providing those vaccinated against COVID-19 with a digital vaccination
-records consisting of a logo, some text, and a QR code (Quick Response
-code). The printed text contains a summary whereas the QR code
-contains the same data that is on the CDC vaccination record one gets
-after a vaccination. This digital record also contains a digital
-signature to show that the record is authentic - that it was in fact
-obtained from the California Department of Public Health. The program
+The program cvrdecode, or its flatpak equivalent, prints out
+information about a California digital vaccine record.  The California
+Department of Public Health is providing those vaccinated against
+COVID-19 with a digital vaccination records consisting of a logo, some
+text, and a QR code (Quick Response code). The printed text contains a
+summary whereas the QR code contains the same data that is on the CDC
+vaccination record one gets after a vaccination. This digital record
+also contains a digital signature to show that the record is authentic
+- that it was in fact obtained from the California Department of
+Public Health. The program
 .B cvrdecode
 was written in part to handle a common use case: private events where
 participants email vaccination records to whoever is hosting the event.
@@ -92,7 +98,7 @@ End of options.  This argument is necessary if the first non-option
 argument if a file name that for some reason starts with "-". Otherwise
 it is not needed.
 .TP
-.B \-i
+.BR \-i \ [\fI\,FILE\/\fR]
 There can be at most one remaining argument. If there is no additional
 argument or the additional argument is
 .BR \- ,
@@ -117,17 +123,46 @@ code, reading a URI contained in a file as text, or accepting the URI
 passed literally as an argument. Each URI will be printed, one per
 line, on standard output.
 .TP
-.B \-v
-The remaining argument (only a single one is allowed) must be either a
-file name,
+.BR \-v \ [\fI\,FILE\/\fR]
+The remaining argument
+.IR FILE .
+if present, must be either a file name for an image file, the character
 .B \-
 (denoting standard input), or a URI that start
 with
 .BR shc:/ .
+If there are no remaiing arguments, standard input is used.
 The URI will be either extracted from a QR code, copied from the
-content of a file or obtained from the literal value of an argument.
+content of the input or obtained from the literal value of an argument.
 The URI will then be decoded, and its contents pretty-printed.  A
 final line indicates if the signature was valid or not.
+.TP
+.BR \-z \ [\fI\,FILE\/\fR]
+There may be at most one additional argument: a file name
+.IR FILE ,
+which may be either the name of a file or
+.BR \- ,
+which denotes standard input.  If there are no additional arguments,
+standard input is read.  The input must be a ZIP file.
+.SH PRIVACY
+If a web server is set up to collect California digital vaccine
+records, he GPG public keys for users authorized to see these records
+an be stored and the server can allow these users to download a
+GPG-encrypted ZIP file containing the records.  The following command
+will print out the CSV file for these records without having any
+stored in the file system:
+.IP
+.B gpg -d
+.I ENCRYPTED_ZIPFILE
+.B | cvrdecode -z
+.PP
+GPG will ask for a passphrase to get access to the public key.
+The CSV output does not contain particularly sensitive information:
+just a full name with a birth date, the last vaccination date,
+a true/false value indicating if a person is fully vaccinated, and
+a true/false value indicating if the record was signed by the
+California Department of Public Health.  The vaccine type and
+the location where the vaccine was provided are not shown.
 
 \"  LocalWords:  cvrdecode fI fR URI COVID shc CSV TP URIs csv png
-\"  LocalWords:  jpg
+\"  LocalWords:  jpg GPG gpg ZIPFILE
