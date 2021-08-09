@@ -7,9 +7,9 @@ cvrdecode \- extract data and verify a California digital vaccine record
 cvrdecode
 [\fI\,OPTION\/\fR] [\fI\,FILENAME\/\fR|\fI\,URI\/\fR]...
 .SH FLATPAK SYNOPSIS
-.B flatpack run org.bzdev.CVRDecode --help\fR|\fB-?
+.B flatpak run org.bzdev.CVRDecode --help\fR|\fB-?
 .br
-.B flatpack run org.bzdev.CVRDecode
+.B flatpak run org.bzdev.CVRDecode
 [\fI\,OPTION\/\fR] [\fI\,FILENAME\/\fR|\fI\,URI\/\fR]...
 .SH DESCRIPTION
 .PP
@@ -131,7 +131,7 @@ if present, must be either a file name for an image file, the character
 (denoting standard input), or a URI that start
 with
 .BR shc:/ .
-If there are no remaiing arguments, standard input is used.
+If there are no remaining arguments, standard input is used.
 The URI will be either extracted from a QR code, copied from the
 content of the input or obtained from the literal value of an argument.
 The URI will then be decoded, and its contents pretty-printed.  A
@@ -144,6 +144,16 @@ which may be either the name of a file or
 .BR \- ,
 which denotes standard input.  If there are no additional arguments,
 standard input is read.  The input must be a ZIP file.
+.SH FLATPAK OPTIONS
+When run using
+.BR flatpak ,
+an additional option is available:
+.TP
+.BR \-\-help | \-h | \-?
+The manual page is displayed. These three options are equivalent and
+are provided to match various expectations of what options generate
+"help" output.
+
 .SH PRIVACY
 If a web server is set up to collect California digital vaccine
 records, he GPG public keys for users authorized to see these records
@@ -164,5 +174,5 @@ a true/false value indicating if the record was signed by the
 California Department of Public Health.  The vaccine type and
 the location where the vaccine was provided are not shown.
 
-\"  LocalWords:  cvrdecode fI fR URI COVID shc CSV TP URIs csv png
-\"  LocalWords:  jpg GPG gpg ZIPFILE
+\"  LocalWords:  cvrdecode fI fR URI COVID shc CSV TP URIs csv png fB
+\"  LocalWords:  jpg GPG gpg ZIPFILE FLATPAK flatpak br
