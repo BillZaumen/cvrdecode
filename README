@@ -29,7 +29,7 @@ lacking with regard to citations and some important details are
 assumed to be obvious, so it takes some time to generate a clear
 description of what to actually do).
 
-Debian packages needed for running and compiling:
+Debian packages needed for running and compiling are:
 
     openjdk-11-jdk
     openjdk-11-jdk-headless
@@ -41,29 +41,30 @@ Debian packages needed for running and compiling:
     libzxing-java
     libzxing-javase-java
 
-  The program inkscape is used to generate icons of various sizes.
-  The icon is in cvrdecode.svg and inkscape can convert that to PNG
-  files of various sizes. The libzxing packages have a dependency on
-  the package libjcommander-java.  The jar file from
-  libjcommander-java does not appear to be needed at compile time or
-  run time given the zxing classes cvrdecode uses.
+The program inkscape is used to generate icons of various sizes.
+The icon is in cvrdecode.svg and inkscape can convert that to PNG
+files of various sizes. The libzxing packages have a dependency on
+the package libjcommander-java.  The jar file from
+libjcommander-java does not appear to be needed at compile time or
+run time given the zxing classes cvrdecode uses.
 
-  Two jar files provided by libbzdev-java are needed:
+Two jar files provided by libbzdev-java are needed:
 
     libbzdev-base.jar  (for generating CSV files and parsing JSON)
     libbzdev-desktop.jar (for a GUI component for tables)
 
-  Two jar files provided by the libzxing packages are needed:
+Two jar files provided by the libzxing packages are needed:
+
     core.jar   (QR code processing)
     javase.jar (QR code processing)
 
-  The module org.bzdev.desktop is dependent on the modules
-  org.bzdev.base and org.bzdev.graphics, which in turn is dependent on
-  org.bzdev.math and org.bzdev.obnaming, but the GUI component from
-  org.bzdev.desktop that is used by cvrdecode does not use any classes
-  from these additional modules.  As a result, cvrdecode does not use
-  Java modules - primarily to keep the number of jar files needed to a
-  minimum.
+The module org.bzdev.desktop is dependent on the modules
+org.bzdev.base and org.bzdev.graphics, which in turn is dependent on
+org.bzdev.math and org.bzdev.obnaming, but the GUI component from
+org.bzdev.desktop that is used by cvrdecode does not use any classes
+from these additional modules.  As a result, cvrdecode does not use
+Java modules - primarily to keep the number of jar files needed to a
+minimum.
 
 To create a Debian package, the usual dpkg tools are needed including
 the fakeroot program from the package fakeroot.
