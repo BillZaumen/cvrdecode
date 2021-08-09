@@ -5,3 +5,10 @@ version.
 
 On Debian GNU/Linux systems you can find a copy of the GPL in
 /usr/share/common-licenses/GPL
+
+cvrdecode uses the Debian packages libzxing-core-java, libzxing-java,
+and libzxing-javase-java.  According to
+
+    https://github.com/zxing/zxing/blob/master/LICENSE
+
+zxing uses the Apache License 2.0.
