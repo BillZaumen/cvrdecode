@@ -2,8 +2,12 @@
 /classes/
 /cvrdecode.jar
 /cvrdecode_*.deb
+/cvrdecode-install-*.jar
 *~
 *.shc
 *.csv
 testdir/
+inst/cvrdecode.jar
+inst/cvrdecode-install.jar
+inst/TBUILD
 

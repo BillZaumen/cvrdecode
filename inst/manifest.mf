@@ -1,0 +1,3 @@
+Main-Class: CaVaxRecDecoder
+Class-Path: libbzdev-base.jar libbzdev-desktop.jar
+  core.jar javase.jar

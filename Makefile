@@ -1,3 +1,12 @@
+# GNU Make file
+# Usage:
+# * make - to make compile and create the JAR file
+# * make deb - to make a Debian package
+# * make installer - to make an installer for non-Debian systems.
+# * make clean - to clean up (including the installer)
+# * make superclean - to clean up and remove the JAR file
+
+
 VERSION = 1.0
 
 DATE = $(shell date -R)
@@ -47,12 +56,6 @@ cvrdecode.jar: CaVaxRecDecoder.java
 		inkscape -w $$i \
 		--export-filename=classes/cvrdecode$${i}.png \
 		cvrdecode.svg ; \
-	done
-	jar cf cvrdecode.jar -C classes .
-
-install: cvrdecode.jar
-	install -d $(BINDIR)
-	install -d $(MANDIR)/man1
 	install -d $(DOCDIR)
 	install -d $(CVRDECODEDIR)
 	install -d $(APP_ICON_DIR)
@@ -111,3 +114,17 @@ $(DEB): deb/control copyright changelog deb/changelog.Debian \
 	sed -e s/VERSION/$(VERSION)/ deb/control > BUILD/DEBIAN/control
 	fakeroot dpkg-deb --build BUILD
 	mv BUILD.deb $(DEB)
+
+installer: cvrdecode-install-$(VERSION).jar
+
+cvrdecode-install-$(VERSION).jar:
+	(cd inst; make)
+	cp inst/cvrdecode-install.jar cvrdecode-install-$(VERSION).jar
+
+clean:
+	rm -f classes/*
+	rm -rf BUILD
+	(cd inst; make clean);
+
+superclean: clean
+	rm -f cvrdecode.jar
