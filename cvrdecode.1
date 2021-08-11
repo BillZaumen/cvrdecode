@@ -135,7 +135,8 @@ If there are no remaining arguments, standard input is used.
 The URI will be either extracted from a QR code, copied from the
 content of the input or obtained from the literal value of an argument.
 The URI will then be decoded, and its contents pretty-printed.  A
-final line indicates if the signature was valid or not.
+final line indicates if the signature was valid or not. This data
+will be sent to the standard output.
 .TP
 .BR \-z \ [\fI\,FILE\/\fR]
 There may be at most one additional argument: a file name
@@ -158,15 +159,15 @@ are provided to match various expectations of what options generate
 
 .SH PRIVACY
 If a web server is set up to collect California digital vaccine
-records, he GPG public keys for users authorized to see these records
-an be stored and the server can allow these users to download a
+records, the GPG public keys for users authorized to see these records
+can be stored and the server can allow these users to download a
 GPG-encrypted ZIP file containing the records.  The following command
 will print out the CSV file for these records without having any
 stored in the file system:
 .IP
 .B gpg -d
 .I ENCRYPTED_ZIPFILE
-.B | cvrdecode -z
+.B | cvrdecode \-z
 .PP
 GPG will ask for a passphrase to get access to the public key.
 The CSV output does not contain particularly sensitive information:
@@ -174,7 +175,9 @@ just a full name with a birth date, the last vaccination date,
 a true/false value indicating if a person is fully vaccinated, and
 a true/false value indicating if the record was signed by the
 California Department of Public Health.  The vaccine type and
-the location where the vaccine was provided are not shown.
+the location where the vaccine was provided are not shown when the
+.B \-z
+option is used.
 
 \"  LocalWords:  cvrdecode fI fR URI COVID shc CSV TP URIs csv png fB
 \"  LocalWords:  jpg GPG gpg ZIPFILE FLATPAK flatpak br
