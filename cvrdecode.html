@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<HTML lang="en">
+<HEAD>
+  <TITLE>CVRDecode Overview</TITLE>
+</HEAD>
+<BODY>
+  <H2>An overview of CVRDecode</H2>
+  <P>
+    CVRDecode (or cvrdecode) is a small utility that reads
+    multiple California digital vaccine records, provided
+    as image files, shc URIs, or files, ending in the
+    file-name extension ".shc" that contain shc URIs. These
+    records are then printed using a CSV (Comma Separated
+    Values) format, with only selected portions of the records
+    shown. This list is sorted by name and birthday. CSV data
+    can be readily imported by spreadsheets.
+  <P>
+    CVRDecode can be run in three ways:
+    <UL>
+      <LI> As a desktop application. The procedure for
+	starting a desktop application is window-system
+	dependent.
+      <LI> As a program started from the command line by
+	running the command
+	<BLOCKQUOTE><CODE><PRE>
+cvrdecode	     
+	</PRE></CODE></BLOCKQUOTE>
+      <LI> as flatpak program started from the command line
+	by running the command
+	<BLOCKQUOTE><CODE><PRE>
+flatpak run org.bzdev.CVRDecode	     
+	</PRE></CODE></BLOCKQUOTE>
+    </UL>
+eog    With no arguments, a GUI will start. Otherwise, the
+    remaining command-line arguments should be options
+    followed by file names or URIs.
+  <P>
+    The command-line options are
+    <UL>
+      <LI><STRONG>--</STRONG>: end  of options.
+      <LI><STRONG>-i</STRONG>: there can be at most one remaining
+	argument. If there is no additional argument or the additional
+	argument is <STRONG>-</STRONG>, a series of
+	<STRONG>shc</STRONG> URIs, one per line, is read from the
+	standard input.  If there is an additional argument other than
+	<STRONG>-</STRONG>, it must be the file name for a file
+	containing <STRONG>shc</STRONG> URIs, one per line.  The
+	output will be in CSV (Comma Separated Values) format, with a
+	header followed by a description of each record, one record
+	per line.  The records will be sorted by family name, given
+	names, and date of birth.
+      <LI><STRONG>-u</STRONG>: the remaining arguments must be file
+	names or URIs that start with <STRONG>shc:/</STRONG> The URIs
+	will be extracted from the inputs by either decoding a QR
+	code, reading a URI contained in a file as text, or accepting
+	the URI passed literally as an argument. Each URI will be
+	printed, one per line, on standard output.
+      <LI><STRONG>-v</STRONG>: the remaining argument, if present,
+	must be either a file name for an image file, the
+	character <STRONG>-</STRONG> (denoting standard input), or a
+	URI that start with <STRONG>shc:/</STRONG>.  If there are no
+	remaining arguments, standard input is used.  The URI will be
+	either extracted from a QR code, copied from the content of
+	the input or obtained from the literal value of an argument.
+	The URI will then be decoded, and its contents pretty-printed.
+	A final line indicates if the signature was valid or not.
+      <LI><STRONG>-z</STRONG>: there may be at most one additional
+	argument: a file name, which may be either the name of a file or
+	<STRONG>-</STRONG>, which denotes standard input.  If there
+	are no additional arguments, standard input is read.  The
+	input must be a ZIP file.  The files contained in the ZIP file
+	will be processed to generate a sorted CSV file as described
+	above.
+      <LI><STRONG>-h</STRONG>, <STRONG>-?</STRONG>,
+	or <STRONG>--help</STRONG>: a copy of the manual page will be
+	displayed.
+    </UL>
+  <P>
+    When started as a desktop application, CVSDecode displays a window
+    with several buttons:
+  <DIV>
+    <CENTER><IMG WIDTH="800pt" HEIGHT="auto" SCR="screenshot2.png"></CENTER>
+  </DIV>
+  <P>
+    The first two buttons determine the input and output. The first
+    button sets the input directory and the second sets the output
+    file for the CSV data. Once the input and output are set, the
+    Run button becomes active, and clicking it will generate the CSV
+    file. Two additional buttons let one view the table immediately
+    and check for any error messages.
+</BODY>
+</HTML>

@@ -143,7 +143,9 @@ There may be at most one additional argument: a file name
 which may be either the name of a file or
 .BR \- ,
 which denotes standard input.  If there are no additional arguments,
-standard input is read.  The input must be a ZIP file.
+standard input is read.  The input must be a ZIP file.  The files
+contained in the ZIP file will be processed to generate a sorted CSV
+file as described above.
 .SH FLATPAK OPTIONS
 When run using
 .BR flatpak ,
