@@ -6,5 +6,6 @@ processed simultaneously and can be displayed in a table
 generated using a CSV (Comma Separated Values) format, which is
 easy to import into applications such as spreadsheets.
 
-Please see [the overview]<cvrdecode.html> for a full description
-of this program.
+Please see
+[the overview](https://billzaumen.github.io/cvrdecode/cvrdecode.html)
+for a full description of this program.
