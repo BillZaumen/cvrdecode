@@ -46,8 +46,7 @@ CP = $(CP1):$(JLDIR)/core.jar:$(JLDIR)/javase.jar:classes
 ICON_WIDTHS = 8 16 20 22 24 32 36 48 64 72 96 128 192 256 512
 ICON_WIDTHS2x = 16 24 32 48 64 128 256
 
-
-all: cvrdecode.jar
+all: cvrdecode.jar $(DEB) docs/cvrdecode-install.jar
 
 cvrdecode.jar: CaVaxRecDecoder.java
 	mkdir -p classes
@@ -56,10 +55,17 @@ cvrdecode.jar: CaVaxRecDecoder.java
 		inkscape -w $$i \
 		--export-filename=classes/cvrdecode$${i}.png \
 		cvrdecode.svg ; \
+	done
+	jar cf cvrdecode.jar -C classes .
+
+install: cvrdecode.jar
 	install -d $(DOCDIR)
 	install -d $(CVRDECODEDIR)
 	install -d $(APP_ICON_DIR)
 	install -d $(APPDIR)
+	install -d $(BINDIR)
+	install -d $(MANDIR)
+	install -d $(MANDIR)/man1
 	install -m 0644 cvrdecode.jar $(CVRDECODEDIR)
 	install -m 0755 -T cvrdecode.sh $(BINDIR)/cvrdecode
 	sed -e s/VERSION/$(VERSION)/ cvrdecode.1 | gzip -n -9 > cvrdecode.1.gz
@@ -115,11 +121,11 @@ $(DEB): deb/control copyright changelog deb/changelog.Debian \
 	fakeroot dpkg-deb --build BUILD
 	mv BUILD.deb $(DEB)
 
-installer: cvrdecode-install-$(VERSION).jar
+installer: docs/cvrdecode-install.jar
 
-cvrdecode-install-$(VERSION).jar:
+docs/cvrdecode-install.jar: cvrdecode.jar
 	(cd inst; make)
-	cp inst/cvrdecode-install.jar cvrdecode-install-$(VERSION).jar
+	cp inst/cvrdecode-install.jar docs/cvrdecode-install.jar
 
 clean:
 	rm -f classes/*
