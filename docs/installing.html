@@ -39,6 +39,7 @@
     BODY {background-color: rgb(10,10,25); color: rgb(255,255,255);}
     A:link {color: rgb(65,255,128);}
     A:visited {color: rgb(65,255,128);}
+    BLOCKQUOTE {background-color: rgb(0,0,0);}
   </STYLE>
 </HEAD>
 <BODY>
@@ -58,92 +59,102 @@
     <A HREF="https://billzaumen.github.io/bzdev/">
       https://billzaumen.github.io/bzdev/
     </A>.
-    The procedure involves downloading a GPG public key and copying it
-    to the directory
-    <CODE>/etc/apt/trusted.gpg.d/</CODE>. The next step is to add the line
-    <BLOCKQUOTE><CODE><PRE>
-deb https://billzaumen.github.io/bzdev/archive/ hirsute contrib
-    </PRE></CODE></BLOCKQUOTE>
-    to a new file placed in the directory
-    <CODE>/etc/apt/sources.list.d/</CODE>. The final step is to run the
-    command <CODE>sudo apt update</CODE> so that <CODE>apt</CODE>
-    recognizes the newly added repository.
-    
   <P>
     Next install the default Java for your system and
     run the following commands (as needed - some packages may already
     be installed):
-    <UL>
-      <LI><CODE>sudo apt-get install libjcommander-java</CODE>
-      <LI><CODE>sudo apt-get install libzxing-java</CODE>
-      <LI><CODE>sudo apt-get install libzxing-core-java</CODE>
-      <LI><CODE>sudo apt-get install libzxing-javase-java</CODE>
-      <LI><CODE>sudo apt-get install libbzdev-java </CODE>
-      <LI><CODE>sudo apt-get install cvrdecode</CODE>
-    </UL>
+    <BLOCKQUOTE><CODE><PRE>
+
+  sudo apt-get install libjcommander-java
+  sudo apt-get install libzxing-java
+  sudo apt-get install libzxing-core-java
+  sudo apt-get install libzxing-javase-java
+  sudo apt-get install libbzdev-java
+  sudo apt-get install cvrdecode
+    </PRE></CODE></BLOCKQUOTE>
 
     <H2 NAME="flatpak">Installing using Flatpak</H2>
   <P>
     [Pending]
-  <H2 NAME="java">Installing using cvrdecode-install.jar</H2>
-<P>
-  An installer is also  available. Please download
-  <A HREF="https://drive.google.com/file/d/1fYYFez7FNsdsLaKOjtsgqiOymfepSKOU/view?usp=sharing">cvrdecode-install.jar</A>.
-  This is a Google Drive link. It may display a download button near
-  the upper-left of the screen. When pressed, you may see a blank
-  window for a few seconds. Then it will ask you what to do.  You
-  should save the file instead of running it (the link is not to an
-  executable file).  If you see a 'spinning' icon in the center of
-  the screen, look for the download button and push it. You will have
-  to use the 'back' button to return to this page.
-<P>
-  For security, run a command that will generate a SHA-256 digest:
-  <BLOCKQUOTE><CODE><PRE>
-shasum -a 256 cvrdecode-install.jar
-  </PRE></CODE></BLOCKQUOTE>
-  from the <EM>download</EM> directory. The hash printed by this
-  command should be
-  <BLOCKQUOTE><CODE><PRE>
-b00a5c7cf639158c77841b849a7eb633e76b0be87aa929e59733caee1aad76d9	
-  </PRE></CODE></BLOCKQUOTE>
-  if the correct file was downloaded.
-<P>
-  Java 11 must be installed before the installer, and the program, can
-  be used. To start the installer, run the command
-  <BLOCKQUOTE><CODE><PRE>
-sudo java -jar cvrdecode-install.jar
-  </PRE></CODE></BLOCKQUOTE>
-  and a program will start that will provide you with several installation
-  options. These options let you pick the location where the software
-  will be installed (generally used standard locations are shown). If
-  <STRONG>sudo</STRONG> is not available, use whatever procedure grants
-  you the privileges needed to install software.
-<P>
-  Some additional manual configuration is currently needed. The
-  installation for Linux/Unix/MacOS should put a command named
-  <STRONG>cvrdecode</STRONG> in a standard location and provide a
-  man page, but will not install icons or integrate the program with
-  one's desktop.  Similar constraints apply to Windows systems and
-  in particular, the installer does not do anything to the registry.
-  If these additional steps are not performed, the program should
-  still work normally, but may  have to be started from a terminal.
-<P>
-  These additional steps should be trivial. For example, the
-  additional steps the Debian package will perform are to
-  <OL>
-    <LI> copy cvrdecode.desktop to an appropriate location.
-    <LI> copy icons to the appropriate locations.
-    <LI> run the command
-      <BLOCKQUOTE><CODE><PRE>
-update-mime-database
-      </PRE></CODE></BLOCKQUOTE>
-      in order to make the icons accessible without needing to
-      reboot.
-  </OL>
-  While easy, these steps still have to be tested, which
-  requires access to systems the author does not have available.
+
+    <H2 NAME="java">Installing using cvrdecode-install.jar</H2>
+  <P>
+    An installer is also  available. Please download
+    <A HREF="https://drive.google.com/file/d/1fYYFez7FNsdsLaKOjtsgqiOymfepSKOU/view?usp=sharing">cvrdecode-install.jar</A>.
+    This is a Google Drive link. It may display a download button near
+    the upper-left of the screen. When pressed, you may see a blank
+    window for a few seconds. Then it will ask you what to do.  You
+    should save the file instead of running it (the link is not to an
+    executable file).  If you see a 'spinning' icon in the center of
+    the screen, look for the download button and push it. You will
+    have to use the 'back' button to return to this page.
+  <P>
+    For security, run a command that will generate a SHA-256 digest:
+    <BLOCKQUOTE><CODE><PRE>
+
+  shasum -a 256 cvrdecode-install.jar
+    </PRE></CODE></BLOCKQUOTE>
+    from the <EM>download</EM> directory. The hash printed by this
+    command should be
+    <BLOCKQUOTE><CODE><PRE>
+
+  b00a5c7cf639158c77841b849a7eb633e76b0be87aa929e59733caee1aad76d9
+    </PRE></CODE></BLOCKQUOTE>
+    if the correct file was downloaded.
+  <P>
+    Java 11 must be installed before the installer, and the program, can
+    be used. To start the installer, run the command
+    <BLOCKQUOTE><CODE><PRE>
+
+  sudo java -jar cvrdecode-install.jar
+    </PRE></CODE></BLOCKQUOTE>
+    and a program will start that will provide you with several installation
+    options. These options let you pick the location where the software
+    will be installed (generally used standard locations are shown). If
+    <STRONG>sudo</STRONG> is not available, use whatever procedure grants
+    you the privileges needed to install software.  If the
+    <STRONG>dry run</STRONG> option is checked, the installer will
+    open a dialog box with a text field containing the corresponding
+    comand to enter in a terminal window given the options that were selected.
+  <P>
+    The command
+    <BLOCKQUOTE><CODE><PRE>
+
+  java -jar cvrdecode-install.jar --help
+    </PRE></CODE></BLOCKQUOTE>
+    will print all the command-line options.  One in particular,
+    <STRONG>--rootdir</STRONG>, can be used to install the software
+    in a specified directory (e.g., for testing).
+  <P>
+    Some additional manual configuration is currently needed. The
+    installation for Linux/Unix/MacOS should put a command named
+    <STRONG>cvrdecode</STRONG> in a standard location and provide a
+    man page, but will not install icons or integrate the program with
+    one's desktop.  Similar constraints apply to Windows systems and
+    in particular, the installer does not do anything to the registry.
+    If these additional steps are not performed, the program should
+    still work normally, but may  have to be started from a terminal.
+  <P>
+    These additional steps should be trivial. For example, the
+    additional steps the Debian package will perform are to
+    <OL>
+      <LI> copy cvrdecode.desktop to an appropriate location.
+      <LI> copy icons to the appropriate locations (the  icons will
+	be stored in a ZIP file named <CODE>share.zip</CODE>).
+      <LI> run the command
+	<BLOCKQUOTE><CODE><PRE>
+
+  update-mime-database
+	</PRE></CODE></BLOCKQUOTE>
+	in order to make the icons accessible without needing to
+	reboot.
+    </OL>
+    While easy, these steps still have to be tested, which
+    requires access to systems the author does not have available.
 </BODY>
 </HTML>
 
-<!--  LocalWords:  CVRDecode monospace rgb cvrdecode
+<!--  LocalWords:  CVRDecode monospace rgb cvrdecode BLOCKQUOTE SHA
+ -->
+<!--  LocalWords:  flatpak libbzdev sudo dryrun rootdir
  -->
