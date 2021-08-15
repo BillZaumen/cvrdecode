@@ -771,7 +771,8 @@ public class Installer {
 	    "core.jar",
 	    "javase.jar",
 	    "share.zip",
-	    "finish.txt"
+	    "finish.txt",
+	    "cvrdecode.desktop"
 	};
 	
 	String policyfiles[] = {

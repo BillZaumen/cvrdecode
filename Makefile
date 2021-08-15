@@ -46,7 +46,7 @@ CP = $(CP1):$(JLDIR)/core.jar:$(JLDIR)/javase.jar:classes
 ICON_WIDTHS = 8 16 20 22 24 32 36 48 64 72 96 128 192 256 512
 ICON_WIDTHS2x = 16 24 32 48 64 128 256
 
-all: cvrdecode.jar $(DEB) docs/cvrdecode-install.jar
+all: cvrdecode.jar $(DEB) inst/cvrdecode-install.jar
 
 cvrdecode.jar: CaVaxRecDecoder.java
 	mkdir -p classes
@@ -121,11 +121,10 @@ $(DEB): deb/control copyright changelog deb/changelog.Debian \
 	fakeroot dpkg-deb --build BUILD
 	mv BUILD.deb $(DEB)
 
-installer: docs/cvrdecode-install.jar
+installer: inst/cvrdecode-install.jar
 
-docs/cvrdecode-install.jar: cvrdecode.jar
+inst/cvrdecode-install.jar: cvrdecode.jar
 	(cd inst; make)
-	cp inst/cvrdecode-install.jar docs/cvrdecode-install.jar
 
 clean:
 	rm -f classes/*

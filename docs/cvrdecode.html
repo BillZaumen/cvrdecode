@@ -10,6 +10,7 @@
 	font-variant: normal;
 	font-style: normal;
 	text-align: center;
+	padding-top: 4ex;
 	padding-bottom: 2ex;
     }
     H2 {
@@ -36,6 +37,7 @@
   </STYLE>
   <STYLE TYPE="text/css" MEDIA="screen">
     BODY {background-color: rgb(10,10,25); color: rgb(255,255,255);}
+    BLOCKQUOTE {background-color: rgb(0,0,0);}
   </STYLE>
 </HEAD>
 <BODY>
@@ -51,19 +53,23 @@
   <P>
     CVRDecode can be run in three ways:
     <UL>
-      <LI> As a desktop application. The procedure for
-	starting a desktop application is window-system
+      <LI> <A HREF="#desktop"> As a desktop application</A>. The
+	procedure for starting a desktop application is window-system
 	dependent.
       <LI> As a program started from the command line by
 	running the command
 	<BLOCKQUOTE><CODE><PRE>
-cvrdecode	     
+
+  cvrdecode
 	</PRE></CODE></BLOCKQUOTE>
+	possibly with command-line arguments.
       <LI> as a flatpak program started from the command line
 	by running the command
 	<BLOCKQUOTE><CODE><PRE>
-flatpak run org.bzdev.CVRDecode	     
+
+  flatpak run org.bzdev.CVRDecode
 	</PRE></CODE></BLOCKQUOTE>
+	possibly with command-line arguments.
     </UL>
     When run from a terminal with no arguments, a GUI will
     start. Otherwise, the remaining command-line arguments should be
@@ -119,7 +125,16 @@ flatpak run org.bzdev.CVRDecode
 	displayed is the manual page.
     </UL>
 
-    <H2>Use as a desktop application</H2>
+    <H2><A NAME="desktop">Use as a desktop application</A></H2>
+  <P>
+    Linux distributions typically  come with window managers that
+    can display the installed desktop applications, so that a user
+    can click on an icon to start a program.  The following is one
+    example - the upper right icon in the following illustration
+    will start CVRDecode.
+    <CENTER>
+      <IMG WIDTH="741" HEIGHT="366" SRC="appview.png">
+    </CENTER>
   <P>
     When started as a desktop application, CVRDecode displays a window
     with several buttons:
@@ -144,7 +159,8 @@ flatpak run org.bzdev.CVRDecode
     <STRONG>shc</STRONG> URIs, are stored in a GPG-encrypted file,
     the command
     <BLOCKQUOTE><CODE><PRE>
-gpg -d ENCRYPTED_FILE | cvrdecode -z > table.csv
+
+  gpg -d ENCRYPTED_FILE | cvrdecode -z > table.csv
     </PRE></CODE></BLOCKQUOTE>
     will generate a CSV file as described above but without the full records
     being stored in a file system. GPG will simply ask for a passphrase to

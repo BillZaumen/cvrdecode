@@ -8,3 +8,6 @@ easy to import into applications such as spreadsheets.
 
 Please see <https://billzaumen.github.io/cvrdecode/cvrdecode.html>
 for a full description of this program.
+
+Please see <https://billzaumen.github.io/cvrdecode/installing.html>
+for instructions on how to install CVRDecode.

@@ -1,45 +1,49 @@
-The BZDev class library includes code for creating a
-file with a MIME type of video/vnd.bzdev.image-sequence+zip
-and the Debian package will configure the windows system
-to recognize this type of file and use a specific icon for
-it.  The installer, however, is meant for a variety of
-systems.
+When a Debian package is used to install cvrdecode, the installer will
+take care of the steps outlined below.  The installer
+cvrdecode-install.jar, however, is meant for a variety of systems,
+and currently it does most of the installation, enough to make
+the software usable, but does not configure the desktop.
 
-The cvrdecode directory (either /usr/local/share/cvrdecode, /usr/opt/cvrdecod, or
-for Windows, %PROGRAMDATA%\cvrdecode) will contain a file named
-share.zip. On systems that support the freedesktop.org standards one
-should look at the environment variables XDG_DATA_HOME and
-XDG_DATA_DIRS. These typically define directory search paths, and will
-typically have a directory /usr/share in one of these paths. With
-/usr/share as an example, running
+The cvrdecode directory (either /usr/local/share/cvrdecode,
+/usr/opt/cvrdecod, or, for Windows, %PROGRAMDATA%\cvrdecode) will
+contain a file named share.zip. On systems that support the
+freedesktop.org standards one should look at the environment variables
+XDG_DATA_HOME and XDG_DATA_DIRS. These typically define directory
+search paths, and will typically have a directory /usr/share in one of
+these paths. With /usr/share as an example, running
 
     sudo unzip share.zip -d /usr/share/
     sudo update-mime-database
 
-will create the necessary files.  In other cases, one will have to
-follow whatever procedure that particular window system and operating
-system uses.
+will create the necessary files.  The program update-mime-database
+will allow the new icons to be used without first rebooting the
+system. Similarly, the file cvrdecode.desktop should be copied to an
+appropriate location but with its Icon line modified to match the
+location where the icon is stored.
+
+In other cases, one will have to follow whatever procedure that
+particular window system and operating system uses.
 
 To configure a window-system that does not follow the freedesktop.org
 standard, one should start by extracting various files from
-share.zip. Some of these files can be read as text files and provide
-specifications for how the window system should be configure.  Other
-files provide icons.  The file share.zip contains the following
-directory:
+share.zip. These files provide icons, either as PNG files or SVG files.
+The file cvrdecode.desktop can be used a guide.
 
-    * icons/
-
-
-The icons directory contains a directory named hicolor, which
-contains directories named and NxN, where N is a postivie integer.
-Each of these directories contains a subdirectory named apps, which contains the icons used in lists of application..  The files for cvrdecode are the
-following:
+The icons directory contains a directory named hicolor, which contains
+directories named and NxN, where N is a postive integer.  Each of
+these directories contains a subdirectory named apps, which contains
+the icons used in lists of applications.  The files for cvrdecode are
+the following:
 
     icons/hicolor/NxN/apps/cvrdecode.png
 
 where N = 16, 20, 22, 24, 32, 36, 48, 64, 72, 96, 128, 192, and
-256. The "scalable" directories represent icons with SVG (Scalable
-Vector Graphics) files so that icons of any desired size can be
+256, and
+
+   icons/hicolor/scalable/apps/cvrdecode.svg
+
+The "scalable" directory provides an SVG (Scalable
+Vector Graphics) file so that icons of any desired size can be
 created.  The NxN directories contain PNG (Portable Network Graphics)
 files with the images having fixed sizes (N is the number of pixels
 for the width and height).
