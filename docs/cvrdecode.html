@@ -27,6 +27,9 @@
 	font-variant: normal;
 	font-style: normal;
     }
+    LI {
+	padding-top: 1ex;
+    }
     CODE {
 	font-weight: normal;
 	font-size: 12pt;
@@ -59,21 +62,28 @@
     <UL>
       <LI> <A HREF="#desktop"> As a desktop application</A>. The
 	procedure for starting a desktop application is window-system
-	dependent.
+	dependent.  This is automatically supported when CVRDecode is
+	installed by a package manager (e.g., apt, synaptic, etc.) or
+	by <CODE>flatpak</CODE>. It may be supported when CVRDecode is
+	installed by running the installer, provided some additional
+	configuration is performed manually.
       <LI> As a program started from the command line by
 	running the command
 	<BLOCKQUOTE><CODE><PRE>
 
   cvrdecode
 	</PRE></CODE></BLOCKQUOTE>
-	possibly with command-line arguments.
+	possibly with command-line arguments This is supported when
+	CVRDecode is installed by a package manager (e.g., apt, synaptic, etc.)
+	or by running the installer application.
       <LI> as a flatpak program started from the command line
 	by running the command
 	<BLOCKQUOTE><CODE><PRE>
 
   flatpak run org.bzdev.CVRDecode
 	</PRE></CODE></BLOCKQUOTE>
-	possibly with command-line arguments.
+	possibly with command-line arguments. This is  supported when
+	flatpak was used to install CVRDecode.
     </UL>
     When run from a terminal with no arguments, a GUI will
     start. Otherwise, the remaining command-line arguments should be
