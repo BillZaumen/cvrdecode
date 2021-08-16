@@ -37,8 +37,8 @@
   </STYLE>
   <STYLE TYPE="text/css" MEDIA="screen">
     BODY {background-color: rgb(10,10,25); color: rgb(255,255,255);}
-    A:link {color: rgb(65,255,128);}
-    A:visited {color: rgb(65,255,128);}
+    A:link {color: rgb(65,225,128);}
+    A:visited {color: rgb(65,164,128);}
     BLOCKQUOTE {background-color: rgb(0,0,0);}
   </STYLE>
 </HEAD>
@@ -49,8 +49,10 @@
     <UL>
     <LI><A HREF="#deb">from Debian packages</A>.
     <LI><A HREF="#flatpak">using flatpak</A>.
-    <LI><A HREF="#java">using an installer program</A>.
+    <LI><A HREF="#java">using the installer program</A>.
   </UL>
+    Software documentation is available in the
+    <A HREF="cvrdecode.html">overview</A>.
 
     <H2 NAME="deb">Installing from Debian packages</H2>
   <P>
@@ -72,10 +74,61 @@
   sudo apt-get install libbzdev-java
   sudo apt-get install cvrdecode
     </PRE></CODE></BLOCKQUOTE>
+  <P>
+    For Linux systems that use the freedesktop.org standards but that are
+    not Debian systems, the package <CODE>alien</CODE> can be used to
+    convert Debian packages to other formats.  The links to the individual
+    packages that are are needed and not available as RPM packages  are
+    <UL>
+      <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/libb/libbzdev-java/libbzdev-java_1.3.7_all.deb">
+	  the libbzdev-java link
+	  </A>.
+      <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/c/cvrdecode/cvrdecode_1.0_all.deb">
+	  the cvrdecode link
+	  </A>.
+    </UL>
+    When these links are visited, the files should be saved.
+    After downloading these Debian files <CODE>alien</CODE> can convert them
+    to a different format (e.g., rpm).
 
     <H2 NAME="flatpak">Installing using Flatpak</H2>
   <P>
-    [Pending]
+    A flatpak bundle is available. Please download
+    <A HREF="https://drive.google.com/file/d/1iNmLlna6ipXnE4qxxwVFVd0gTBaKWh6K/view?usp=sharing">cvrdecode.flatpak</A>.
+    This is a Google Drive link. It may display a download button near
+    the upper-left of the screen. When pressed, you may see a blank
+    window for a few seconds. Then it will ask you what to do.  You
+    should save the file instead of running it (the link is not to an
+    executable file).  If you see a 'spinning' icon in the center of
+    the screen, look for the download button and push it. You will
+    have to use the 'back' button to return to this page.
+  <P>
+    For security, run a command that will generate a SHA-256 digest:
+    <BLOCKQUOTE><CODE><PRE>
+
+  shasum -a 256 cvrdecode.flatpak
+    </PRE></CODE></BLOCKQUOTE>
+    from the <EM>download</EM> directory. The digest printed by this
+    command should be
+    <BLOCKQUOTE><CODE><PRE>
+
+  cef0563a7910c8683891359bc638a028cf5a18d35a7bd47b13a0c08eeb8668e7
+    </PRE></CODE></BLOCKQUOTE>
+    if the correct file was downloaded.
+  <P>
+    <BLOCKQUOTE><CODE><PRE>
+
+  flatpack install cvrdecode.flatpak
+    </PRE></CODE></BLOCKQUOTE>
+    for a system-wide installation, or
+    <BLOCKQUOTE><CODE><PRE>
+
+  flatpack install --user cvrdecode.flatpak
+    </PRE></CODE></BLOCKQUOTE>
+    to install for use by a single user (system privileges will not be
+    needed in this case).
+  <P>
+    [ Installing from the FlatHub repository pending ]
 
     <H2 NAME="java">Installing using cvrdecode-install.jar</H2>
   <P>
@@ -94,7 +147,7 @@
 
   shasum -a 256 cvrdecode-install.jar
     </PRE></CODE></BLOCKQUOTE>
-    from the <EM>download</EM> directory. The hash printed by this
+    from the <EM>download</EM> directory. The digest printed by this
     command should be
     <BLOCKQUOTE><CODE><PRE>
 
@@ -102,20 +155,20 @@
     </PRE></CODE></BLOCKQUOTE>
     if the correct file was downloaded.
   <P>
-    Java 11 must be installed before the installer, and the program, can
+    Java 11 must be installed before the installer can
     be used. To start the installer, run the command
     <BLOCKQUOTE><CODE><PRE>
 
   sudo java -jar cvrdecode-install.jar
     </PRE></CODE></BLOCKQUOTE>
-    and a program will start that will provide you with several installation
+    and an installer start that will provide you with several installation
     options. These options let you pick the location where the software
     will be installed (generally used standard locations are shown). If
     <STRONG>sudo</STRONG> is not available, use whatever procedure grants
     you the privileges needed to install software.  If the
     <STRONG>dry run</STRONG> option is checked, the installer will
     open a dialog box with a text field containing the corresponding
-    comand to enter in a terminal window given the options that were selected.
+    command to enter in a terminal window given the options that were selected.
   <P>
     The command
     <BLOCKQUOTE><CODE><PRE>
@@ -124,7 +177,8 @@
     </PRE></CODE></BLOCKQUOTE>
     will print all the command-line options.  One in particular,
     <STRONG>--rootdir</STRONG>, can be used to install the software
-    in a specified directory (e.g., for testing).
+    in a specified directory (e.g., for testing), in which case the
+    use of <STRONG>sudo</STRONG> may not be necessary.
   <P>
     Some additional manual configuration is currently needed. The
     installation for Linux/Unix/MacOS should put a command named
@@ -136,7 +190,8 @@
     still work normally, but may  have to be started from a terminal.
   <P>
     These additional steps should be trivial. For example, the
-    additional steps the Debian package will perform are to
+    additional steps that <CODE> apt-get install cvrdecode</CODE> will
+    perform are to
     <OL>
       <LI> copy cvrdecode.desktop to an appropriate location.
       <LI> copy icons to the appropriate locations (the  icons will
@@ -156,5 +211,7 @@
 
 <!--  LocalWords:  CVRDecode monospace rgb cvrdecode BLOCKQUOTE SHA
  -->
-<!--  LocalWords:  flatpak libbzdev sudo dryrun rootdir
+<!--  LocalWords:  flatpak libbzdev sudo dryrun rootdir freedesktop
+ -->
+<!--  LocalWords:  FlatHub
  -->
