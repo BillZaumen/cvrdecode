@@ -29,16 +29,29 @@ lacking with regard to citations and some important details are
 assumed to be obvious, so it takes some time to generate a clear
 description of what to actually do).
 
-Debian packages needed for running and compiling are:
+The Debian packages needed for compiling are:
 
-    openjdk-11-jdk
-    openjdk-11-jdk-headless
-    openjdk-11-jre
-    openjdk-11-jre-headless
-    inkscape-1.0.2-3ubuntu1  (version 1.0.2 & later OK)
-    libbzdev-java    (not yet publicly available)
-    libzxing-core-java
+    openjdk-11-jdk           (or later)
+    openjdk-11-jdk-headless  (or later)
+    openjdk-11-jre           (or later
+    openjdk-11-jre-headless  (or later)
+    inkscape-1.0.2-3ubuntu1  (version 1.0.2 or later)
+    libbzdev-java (see <https://billzaumen.github.io/bzdev/>)
+    libjcommander-java  (for a package dependency but not used)
     libzxing-java
+    libzxing-core-java
+    libzxing-javase-java
+
+The Debian packages needed for running are:
+
+    openjdk-11-jdk           (or later)
+    openjdk-11-jdk-headless  (or later)
+    openjdk-11-jre           (or later
+    openjdk-11-jre-headless  (or later)
+    libbzdev-java (see <https://billzaumen.github.io/bzdev/>)
+    libjcommander-java  (for a package dependency but not used)
+    libzxing-java
+    libzxing-core-java
     libzxing-javase-java
 
 The program inkscape is used to generate icons of various sizes.
