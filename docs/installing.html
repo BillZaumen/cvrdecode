@@ -20,6 +20,13 @@
 	font-variant: normal;
 	font-style: normal;
     }
+    H3 {
+	font-weight: bold;
+	font-size: 12pt;
+	font-family: sans-serif;
+	font-variant: normal;
+	font-style: normal;
+    }
     P {
 	font-weight: normal;
 	font-size: 12pt;
@@ -42,7 +49,7 @@
     BODY {background-color: rgb(10,10,25); color: rgb(255,255,255);}
     A:link {color: rgb(65,225,128);}
     A:visited {color: rgb(65,164,128);}
-    BLOCKQUOTE {background-color: rgb(0,0,0);}
+    BLOCKQUOTE {background-color: rgb(50,50,50);}
   </STYLE>
 </HEAD>
 <BODY>
@@ -50,14 +57,53 @@
   <P>
     There are three options for installing CVRDecode:
     <UL>
-    <LI><A HREF="#deb">from Debian packages</A>.
-    <LI><A HREF="#flatpak">using flatpak</A>.
-    <LI><A HREF="#java">using the installer program</A>.
+      <LI><A HREF="#flatpak">using flatpak</A>.
+      <LI><A HREF="#deb">from Debian packages</A>.
+      <LI><A HREF="#rpm"> from other package-managers</A>.
+      <LI><A HREF="#java">using the installer program</A>.
   </UL>
     Software documentation is available in the
     <A HREF="cvrdecode.html">overview</A>.
+    <H2><A NAME="flatpak">Installing using Flatpak</A></H2>
+  <P>
+    CVRDecode is available on FlatHub, and this is possibly the
+    simplest installation option for causal use. The web page
+    <BLOCKQUOTE>
+      <br>
+      <A HREF="https://flathub.org/apps/details/org.bzdev.CVRDecode">
+	https://flathub.org/apps/details/org.bzdev.CVRDecode
+      </A><br><br>
+    </BLOCKQUOTE>
+    contains installation instructions, both a link to installation
+    instructions for flatpak/flathub and an 'install' button for
+    CVRDecode itself.
+    <H3>Manual installation</H3>
+  <P>
+    If flathub is not installed, the web page
+    <A HREF="https://flatpak.org/setup/">https://flatpak.org/setup/</A>
+    has instructions for various Linux systems (details depend on the
+    package manager each distribution provides).  If a remote named
+    flathub, or something similar, is not available, it can be added
+    by running a command such as
+    <BLOCKQUOTE><CODE><PRE>
 
-    <H2 NAME="deb">Installing from Debian packages</H2>
+  flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    </PRE></CODE></BLOCKQUOTE>
+    Again, the web page
+    <A HREF="https://flatpak.org/setup/">https://flatpak.org/setup/</A>
+    has instructions.
+    <P>
+      Once flatpak is installed an the FlatHub remote respository is
+      ocnfigured (if necessary) just run the command
+    <BLOCKQUOTE><CODE><PRE>
+
+  flatpak install --user flathub org.bzdev.CVRDecode
+    </PRE></CODE></BLOCKQUOTE> the <CODE>--user</CODE> option will
+    make the installation specific to one user. It should not be used
+    for a system-wide installation, which of course requires
+    adminstrative privileges.
+
+    <H2><A NAME="deb">Installing from Debian packages</A></H2>
   <P>
     First add the Debian repository that contains the libbzdev-java
     and cvrdecode packages.  Instructions are available at
@@ -65,9 +111,9 @@
       https://billzaumen.github.io/bzdev/
     </A>.
   <P>
-    Next install the default Java for your system and
-    run the following commands (as needed - some packages may already
-    be installed):
+    Next install the default Java for your system (cvrdecode has been
+    compiled for Java 11) and run the following commands (as needed -
+    some packages may already be installed):
     <BLOCKQUOTE><CODE><PRE>
 
   sudo apt-get install libjcommander-java
@@ -78,12 +124,15 @@
   sudo apt-get install cvrdecode
     </PRE></CODE></BLOCKQUOTE>
   <P>
+
+    <H2><A NAME="rpm">Other package mangers</A></H2>
+  <P>
     For Linux systems that use the freedesktop.org standards but that are
     not Debian systems, the package <CODE>alien</CODE> can be used to
     convert Debian packages to other formats.  The links to the individual
     packages that are are needed and not available as RPM packages  are
     <UL>
-      <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/libb/libbzdev-java/libbzdev-java_1.3.7_all.deb">
+      <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/libb/libbzdev-java/libbzdev-java_1.3.8_all.deb">
 	  the libbzdev-java link
 	  </A>.
       <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/c/cvrdecode/cvrdecode_1.0_all.deb">
@@ -94,54 +143,17 @@
     After downloading these Debian files <CODE>alien</CODE> can convert them
     to a different format (e.g., rpm).
 
-    <H2 NAME="flatpak">Installing using Flatpak</H2>
-  <P>
-    A flatpak bundle is available. Please download
-    <A HREF="https://drive.google.com/file/d/1iNmLlna6ipXnE4qxxwVFVd0gTBaKWh6K/view?usp=sharing">cvrdecode.flatpak</A>.
-    This is a Google Drive link. It may display a download button near
-    the upper-left of the screen. When pressed, you may see a blank
-    window for a few seconds. Then it will ask you what to do.  You
-    should save the file instead of running it (the link is not to an
-    executable file).  If you see a 'spinning' icon in the center of
-    the screen, look for the download button and push it. You will
-    have to use the 'back' button to return to this page.
-  <P>
-    For security, run a command that will generate a SHA-256 digest:
-    <BLOCKQUOTE><CODE><PRE>
-
-  shasum -a 256 cvrdecode.flatpak
-    </PRE></CODE></BLOCKQUOTE>
-    from the <EM>download</EM> directory. The digest printed by this
-    command should be
-    <BLOCKQUOTE><CODE><PRE>
-
-  f15f900eca5865b906dabadf93624185983011726d88775c68479f200d335d03
-    </PRE></CODE></BLOCKQUOTE>
-    if the correct file was downloaded.
-  <P>
-    <BLOCKQUOTE><CODE><PRE>
-
-  flatpack install cvrdecode.flatpak
-    </PRE></CODE></BLOCKQUOTE>
-    for a system-wide installation, or
-    <BLOCKQUOTE><CODE><PRE>
-
-  flatpack install --user cvrdecode.flatpak
-    </PRE></CODE></BLOCKQUOTE>
-    to install for use by a single user (system privileges will not be
-    needed in this case).
-
-    <H2 NAME="java">Installing using cvrdecode-install.jar</H2>
+    <H2><A NAME="java">Installing using cvrdecode-install.jar</A></H2>
   <P>
     An installer is also  available. Please download
-    <A HREF="https://drive.google.com/file/d/1fYYFez7FNsdsLaKOjtsgqiOymfepSKOU/view?usp=sharing">cvrdecode-install.jar</A>.
+    <A HREF="https://drive.google.com/file/d/1fYYFez7FNsdsLaKOjtsgqiOymfepSKOU/view?usp=sharing" TARGET="_blank">cvrdecode-install.jar</A>.
     This is a Google Drive link. It may display a download button near
     the upper-left of the screen. When pressed, you may see a blank
     window for a few seconds. Then it will ask you what to do.  You
     should save the file instead of running it (the link is not to an
     executable file).  If you see a 'spinning' icon in the center of
-    the screen, look for the download button and push it. You will
-    have to use the 'back' button to return to this page.
+    the screen, look for the download button and push it. The dowload link
+    should appear in a separate tab or window.
   <P>
     For security, run a command that will generate a SHA-256 digest:
     <BLOCKQUOTE><CODE><PRE>
@@ -152,7 +164,7 @@
     command should be
     <BLOCKQUOTE><CODE><PRE>
 
-  91c7f82f62b94c1befdd98d77293ab8ee8a66807c829ef67b32c4262c0bc6f2b
+  6e4900c35c876818cbacb081b8174a761dd14bd3abd84804088d0b76bedc2592
     </PRE></CODE></BLOCKQUOTE>
     if the correct file was downloaded.
   <P>
