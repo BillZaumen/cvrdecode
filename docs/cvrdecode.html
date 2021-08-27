@@ -20,12 +20,22 @@
 	font-variant: normal;
 	font-style: normal;
     }
+    H3 {
+	font-weight: bold;
+	font-size: 12pt;
+	font-family: sans-serif;
+	font-variant: normal;
+	font-style: normal;
+    }
     P {
 	font-weight: normal;
 	font-size: 12pt;
 	font-family: serif;
 	font-variant: normal;
 	font-style: normal;
+    }
+    UL {
+	padding-bottom: 1ex;
     }
     LI {
 	padding-top: 1ex;
@@ -58,16 +68,16 @@
     see <A HREF="installing.html">the installer web page</A> for
     installation instructions.
   <P>
-    CVRDecode can be run in three ways:
+    CVRDecode can be run in four ways:
     <UL>
-      <LI> <A HREF="#desktop"> As a desktop application</A>. The
+      <LI> <A HREF="#desktop">as a desktop application</A>. The
 	procedure for starting a desktop application is window-system
 	dependent.  This is automatically supported when CVRDecode is
 	installed by a package manager (e.g., apt, synaptic, etc.) or
 	by <CODE>flatpak</CODE>. It may be supported when CVRDecode is
 	installed by running the installer, provided some additional
 	configuration is performed manually.
-      <LI> As a program started from the command line by
+      <LI> <A HREF="#cli">as a program</A> started from the command line by
 	running the command
 	<BLOCKQUOTE><CODE><PRE>
 
@@ -76,7 +86,7 @@
 	possibly with command-line arguments This is supported when
 	CVRDecode is installed by a package manager (e.g., apt, synaptic, etc.)
 	or by running the installer application.
-      <LI> as a flatpak program started from the command line
+      <LI> <A HREF="#cli">as a flatpak program</A> started from the command line
 	by running the command
 	<BLOCKQUOTE><CODE><PRE>
 
@@ -84,6 +94,7 @@
 	</PRE></CODE></BLOCKQUOTE>
 	possibly with command-line arguments. This is  supported when
 	flatpak was used to install CVRDecode.
+      <LI> <A HREF="#docker">as a web server</A> running in a Docker container.
     </UL>
     When run from a terminal with no arguments, a GUI will
     start. Otherwise, the remaining command-line arguments should be
@@ -94,7 +105,7 @@
     <STRONG>-v</STRONG> options described below). When run as a
     desktop application, the CSV data will be written to a file.
 
-    <h2>Command-line Options</h2>
+    <h2><A NAME="cli">1.0 Command-line Options</A></h2>
   <P>
     The command-line options are
     <UL>
@@ -138,8 +149,13 @@
 	displayed. This option is provided for flatpak alone: what is
 	displayed is the manual page.
     </UL>
+  <P>
+    If there are no command-line arguments, a GUI will start.
+    If there no options, the command-line arguments should be
+    image files or text files containing SHC URIs with file names
+    ending in the suffix ".shc".
 
-    <H2><A NAME="desktop">Use as a desktop application</A></H2>
+    <H2><A NAME="desktop">2.0 Use as a desktop application</A></H2>
   <P>
     Linux distributions typically  come with window managers that
     can display the installed desktop applications, so that a user
@@ -167,7 +183,7 @@
     the table immediately and check for any error messages. The final
     button, named <STRONG>Exit</STRONG>, terminates the program.
 
-    <H2>Privacy</H2>
+    <H2>3.0 Privacy</H2>
   <P>
     If the records, whether as images or as files containing
     <STRONG>shc</STRONG> URIs, are stored in a GPG-encrypted file,
@@ -180,28 +196,112 @@
     being stored in a file system. GPG will simply ask for a passphrase to
     decrypt the file.
 
-    <H2>Use Case</H2>
+    <H2><A NAME="docker">4.0 Docker</A></H2>
   <P>
-    CVRDecode was written based on a use case generated from personal
-    experience. During the summer of 2021, people were hosting private
-    events, typically outdoors, with a requirement that everyone attending
-    was vaccinated. You could provide a vaccination record upon arrival,
-    but you could also email a photo of a vaccination record in advance.
-    a volunteer would then check a list (a paper copy as who was doing what
-    was often not known in advance). Manually copying records for 50 or
-    so people is time consuming. CVRDecode was written to help automate
-    the process.
+    CVRDecode is available as a Docker image.  The image provides a
+    web server. To start it, use the command
+    <BLOCKQUOTE><CODE><PRE>
+
+  docker run --publish 80:80 --detach --name cvrdecode wtzbzdev/cvrdecode:1.0
+    </PRE></CODE></BLOCKQUOTE>
   <P>
-    For an event run by a business or organization, it is easy to
-    provide an appropriate device for scanning the QR codes. When the
-    person checking the records is chosen at the last moment, however,
-    that person might not want to load additional software onto his or
-    her smart phone or drain the phone's battery. In this case, a
-    "low tech" solution is a good choice.
+    The server is configured using 5 environment variables, three of
+    which can by set with the <STRONG>--env</STRONG> option provided
+    by <STRONG>docker run</STRONG>:
+    <UL>
+      <LI><STRONG>BACKLOG=</STRONG><U>M</U> where M is a positive
+	integer providing the TCP backlog.  The default is 30.
+      <LI><STRONG>NTHREADS=</STRONG><U>M</U> where M is a positive
+	integer indicating the number of threads the server may use.
+	The default is 50.
+      <LI><STRONG>TRACE=</STRONG><U>TRUE</U> turns on tracing (which is
+	off by default).
+      <LI><STRONG>IPADDR=</STRONG><U>ADDR</U> sets the server's IP
+	address. Well-known values are <STRONG>wildcard</STRONG> and
+	<STRONG>loopback</STRONG>. The default is <STRONG>wildcard</STRONG>
+	and should not be changed unless a new Dockerfile is created.
+      <LI><STRONG>PORT=</STRONG><U>PORT</U>. This sets the server's
+	TCP port to <U>PORT</U>. The default is 80 and should not be changed
+	unless the Dockerfile is modified.
+    </UL>
+    <P>
+      The variables <STRONG>BACKLOG</STRONG>, <STRONG>NTHREAD</STRONG>,
+      and <STRONG>TRACE</STRONG> can be set using the
+      <STRONG>docker run</STRONG>
+      option <STRONG>--env</STRONG>. Changing the others using
+      the <STRONG>--env</STRONG> option may prevent the web server
+      from being visible outside of its container.
+
+    <P>
+      To stop the server, run the commands
+    <BLOCKQUOTE><CODE><PRE>
+
+  docker stop cvrdecode
+  docker rm cvrdecode
+    </PRE></CODE></BLOCKQUOTE>
+
+    <H3>4.1 Using the server</H3>
+
+    The server expects a URL with no path: for example
+    <BLOCKQUOTE><CODE><PRE>
+
+  http://localhost/
+    </PRE></CODE></BLOCKQUOTE>
+    <P>
+      When this URL is visited by a browser, a simple web page will be
+      shown. This page contains an HTML form with two controls.  One
+      control allows the user to specify a ZIP file containing images
+      of California digital vaccine records and/or text files with the
+      suffix ".shc", each containing a Smart Health Card URI.  . When
+      the button labeled <STRONG>Download Table</STRONG> is pushed,
+      the server will upload the ZIP file and return a CSV file that
+      the user can save or open with a suitable application such as
+      a spreadsheet.
+
+      <H3>4.2 Deploying the server</H3>
+    <P>
+      The commands provided above are sufficient for using the docker
+      image locally or on a private network.  For public use, one should
+      treat the server as an application server and configure a publicly
+      visible web server as a reverse proxy using HTTPS. For large scale
+      use, one may want to use Docker Swarm or Kubenetes in order to add
+      CVRDecode servers as needed. The CVRDecode server is stateless.
+
+    <H2>5.0 Use Cases</H2>
+    <P>
+      CVRDecode was written based on a use case generated from
+      personal experience. During the summer of 2021, people were
+      hosting private events, typically outdoors, with a requirement
+      that everyone attending was vaccinated. You could provide a
+      vaccination record upon arrival, but you could also email a
+      photo of a vaccination record in advance.  a volunteer would
+      then check a list (a paper copy as who was helping with what was
+      often not known in advance). Manually copying records for 50 or
+      so people is time consuming. CVRDecode was written to help
+      automate the process.
+    <P>
+      For an event run by a business or organization, it is easy to
+      provide an appropriate device for scanning the QR codes. When
+      the person checking the records is chosen at the last moment,
+      however, that person might not want to load additional software
+      onto his or her smart phone or drain the phone's battery. In
+      this case, a "low tech" solution is a good choice.
+    <P>
+      CVRDecode can also be used with the <STRONG>-v</STRONG> option
+      so that user's can determine if their California digital vaccine
+      record is correct - it will display all the information encoded
+      by the QRCode (although the actual reason for this option was as
+      an aid for software development).
 </BODY>
 </HTML>
 
 <!--  LocalWords:  CVRDecode cvrdecode shc URIs CSV flatpak URI rgb
  -->
-<!--  LocalWords:  monospace GPG decrypt BLOCKQUOTE
+<!--  LocalWords:  monospace GPG decrypt BLOCKQUOTE env TCP NTHREADS
+ -->
+<!--  LocalWords:  IPADDR ADDR loopback Dockerfile NTHREAD HTTPS lang
+ -->
+<!--  LocalWords:  Kubenetes DOCTYPE css HREF html cli PRE IMG SRC
+ -->
+<!-- LocalWords:  appview png gpg csv wtzbzdev QRCode
  -->
