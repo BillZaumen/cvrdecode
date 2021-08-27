@@ -1,0 +1,9 @@
+.git
+server/classes/*
+server/Makefile
+server/webpage.html
+server/
+**/Makefile
+**/*~
+**/*.java
+**/*.mf

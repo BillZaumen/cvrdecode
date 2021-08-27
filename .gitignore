@@ -10,3 +10,7 @@ testdir/
 inst/cvrdecode.jar
 inst/TBUILD
 
+docker/*.jar
+docker/server/classes/*
+
+

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<HTML>
+  <HEAD>
+  <TITLE>CVR Table Download</TITLE>
+  <STYLE TYPE="text/css" MEDIA="all">
+    H1 {
+	font-weight: bold;
+	font-size: 18pt;
+	font-family: sans-serif;
+	font-variant: normal;
+	font-style: normal;
+	text-align: center;
+	padding-top: 4ex;
+	padding-bottom: 2ex;
+    }
+    H2 {
+	font-weight: bold;
+	font-size: 14pt;
+	font-family: sans-serif;
+	font-variant: normal;
+	font-style: normal;
+    }
+    P {
+	font-weight: normal;
+	font-size: 12pt;
+	font-family: serif;
+	font-variant: normal;
+	font-style: normal;
+    }
+  </STYLE>
+  <STYLE TYPE="text/css" MEDIA="screen">
+    BODY {background-color: rgb(10,10,25); color: rgb(255,255,255);}
+    FORM {background-color: rgb(50,50,50);}
+  </STYLE>
+</HEAD>
+<BODY>
+  <H1>California Digital Vaccine Record Table</H1>
+
+  <H2>Generating a California Digital Vaccine Record Table</h2>
+  <P>
+    The input is a ZIP file containing images of California digital
+    vaccine records or files with the extension "shc" containing Smart
+    Health Card URIs.  The filename must end in the suffix ".zip" if a
+    browser cannot determine that the media type is application/zip
+    and classifies it as application/octet-stream instead.
+  <P>
+    After downloading, save the CSV file that was generated or open it with
+    a suitable application. A spreadsheet should be able to open it. If there
+    are options for delimiters separating fields, choose commas.
+  <P>
+    <DIV ALIGN="center">
+      <FORM ACTION="servlet/adapter/" METHOD="POST"
+	    ENCTYPE="multipart/form-data" ID="form">
+	<BR>
+	<TABLE border="2">
+	  <TR><TH ALIGN="right">ZipFile:</TH><TD>
+	      <INPUT TYPE="FILE" ACCEPT="application/zip" NAME="input">
+	    </TD>
+	  <TR><TH ALIGN="right">Generate Table:</TH><TD>
+	      <INPUT TYPE="SUBMIT" name="run" value="Download Table">
+	    </TD>
+	</TABLE>
+	<BR>
+      </FORM>
+    </DIV>
+</BODY>
+</HTML>
