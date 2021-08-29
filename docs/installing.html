@@ -67,7 +67,7 @@
     <A HREF="cvrdecode.html">overview</A>.
     <H2><A NAME="flatpak">Installing using Flatpak</A></H2>
   <P>
-    CVRDecode is available on FlatHub, and this is possibly the
+    CVRDecode is available on Flathub, and this is possibly the
     simplest installation option for causal use. The web page
     <BLOCKQUOTE>
       <br>
@@ -94,15 +94,15 @@
     <A HREF="https://flatpak.org/setup/">https://flatpak.org/setup/</A>
     has instructions.
     <P>
-      Once flatpak is installed an the FlatHub remote respository is
-      ocnfigured (if necessary) just run the command
+      Once flatpak is installed an the Flathub remote repository is
+      configured (if necessary) just run the command
     <BLOCKQUOTE><CODE><PRE>
 
   flatpak install --user flathub org.bzdev.CVRDecode
     </PRE></CODE></BLOCKQUOTE> the <CODE>--user</CODE> option will
     make the installation specific to one user. It should not be used
     for a system-wide installation, which of course requires
-    adminstrative privileges.
+    administrative privileges.
 
     <H2><A NAME="docker">Installing a Docker image</A></H2>
 
@@ -112,7 +112,25 @@
   docker pull wtzbzdev/cvrdecode
     </PRE></CODE></BLOCKQUOTE>
     <P>
-    Installing docker itself is system dependent.
+      Installing docker itself is system dependent.
+      <UL> <A HREF="https://docs.docker.com/desktop/mac/">https://docs.docker.com/desktop/mac/</A>
+	has instructions for MacOS.
+	<UL>
+	<UL>
+	  <LI> <A HREF="https://docs.docker.com/engine/install/">
+	      https://docs.docker.com/engine/install/
+	    </A>
+	    has instructions for various Linux distributions. Some Linux
+	    distributions provide Docker via their package managers.
+	  <LI> <A HREF="https://hub.docker.com/editions/community/docker-ce-desktop-mac">
+	      https://hub.docker.com/editions/community/docker-ce-desktop-mac
+	    </A>
+	    has instructions for MacOS.
+	  <LI> <A HREF="https://hub.docker.com/editions/community/docker-ce-desktop-windows">
+	      https://hub.docker.com/editions/community/docker-ce-desktop-windows
+	    </A>
+	    has instructions for Windows.
+      </UL>
 
     <H2><A NAME="deb">Installing from Debian packages</A></H2>
   <P>
@@ -163,7 +181,7 @@
     window for a few seconds. Then it will ask you what to do.  You
     should save the file instead of running it (the link is not to an
     executable file).  If you see a 'spinning' icon in the center of
-    the screen, look for the download button and push it. The dowload link
+    the screen, look for the download button and push it. The download link
     should appear in a separate tab or window.
   <P>
     For security, run a command that will generate a SHA-256 digest:
@@ -237,5 +255,5 @@
  -->
 <!--  LocalWords:  flatpak libbzdev sudo dryrun rootdir freedesktop
  -->
-<!--  LocalWords:  FlatHub
+<!--  LocalWords:  Flathub flathub MacOS
  -->

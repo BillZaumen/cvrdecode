@@ -198,8 +198,10 @@
 
     <H2><A NAME="docker">4.0 Docker</A></H2>
   <P>
-    CVRDecode is available as a Docker image.  The image provides a
-    web server. To start it, use the command
+    CVRDecode is available as a Docker image.  The Docker image
+    provides a web server that will except a ZIP file containing
+    California digital vaccine records as an input and that will
+    produce a table as its output. To start it, use the command
     <BLOCKQUOTE><CODE><PRE>
 
   docker run --publish 80:80 --detach --name cvrdecode wtzbzdev/cvrdecode:1.0
