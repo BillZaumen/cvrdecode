@@ -808,6 +808,7 @@ public class CaVaxRecDecoder {
 		} else {
 		    err.println("cvrdecode: bad input at line number "
 				       + linecnt);
+		    err.flush();
 		}
 	    }
 	    argv = alist.toArray(new String[alist.size()]);
