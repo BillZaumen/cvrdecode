@@ -7,7 +7,7 @@
 # * make superclean - to clean up and remove the JAR file
 
 
-VERSION = 1.0
+VERSION = 1.1
 
 DATE = $(shell date -R)
 

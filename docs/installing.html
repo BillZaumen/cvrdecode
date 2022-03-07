@@ -146,7 +146,11 @@
   sudo apt-get install libzxing-java
   sudo apt-get install libzxing-core-java
   sudo apt-get install libzxing-javase-java
-  sudo apt-get install libbzdev-java
+  sudo apt-get install libbzdev-base-java
+  sudo apt-get install libbzdev-math-java
+  sudo apt-get install libbzdev-obnaming-java
+  sudo apt-get install libbzdev-graphics-java
+  sudo apt-get install libbzdev-desktop-java
   sudo apt-get install cvrdecode
     </PRE></CODE></BLOCKQUOTE>
   <P>
@@ -155,17 +159,19 @@
   <P>
     For Linux systems that use the freedesktop.org standards but that are
     not Debian systems, the package <CODE>alien</CODE> can be used to
-    convert Debian packages to other formats.  The links to the individual
-    packages that are are needed and not available as RPM packages  are
-    <UL>
-      <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/libb/libbzdev-java/libbzdev-java_1.3.8_all.deb">
-	  the libbzdev-java link
-	  </A>.
-      <LI><A HREF="https://billzaumen.github.io/bzdev/archive/pool/contrib/c/cvrdecode/cvrdecode_1.0_all.deb">
-	  the cvrdecode link
-	  </A>.
-    </UL>
-    When these links are visited, the files should be saved.
+    convert Debian packages to other formats.  The Debian packages that
+    are not available as RPM packages can
+    be downloaded by using the commands
+    <BLOCKQUOTE><CODE><PRE>
+
+  sudo apt-get download libbzdev-base-java
+  sudo apt-get download libbzdev-math-java
+  sudo apt-get download libbzdev-obnaming-java
+  sudo apt-get download libbzdev-graphics-java
+  sudo apt-get download libbzdev-desktop-java
+  sudo apt-get download cvrdecode
+    </PRE></CODE></BLOCKQUOTE>
+  <P>
     After downloading these Debian files <CODE>alien</CODE> can convert them
     to a different format (e.g., rpm).
 

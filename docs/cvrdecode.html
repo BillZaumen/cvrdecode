@@ -181,7 +181,22 @@
     <STRONG>Run</STRONG> button becomes active, and clicking it
     will generate the CSV file. Two additional buttons let one view
     the table immediately and check for any error messages. The final
-    button, named <STRONG>Exit</STRONG>, terminates the program.
+    button, named <STRONG>Exit</STRONG>, terminates the program. The
+    table is mostly self explanatory, with two exceptions:
+    <UL>
+      <LI>the column indicating if an individual is fully vaccinated
+	is a boolean value and when <CODE>true</CODE>, the boolean
+	value is followed by a number in parentheses.  That number
+	indicates the number of vaccine doses received and is present
+	when booster vaccinations were given.
+      <LI> the last column, which provides an indication of the file
+	containing the vaccine record, may be prefaced with a number
+	in square brackets that is basically a footnote.  When these
+	exist, a short table at the end gives the host name for
+	whatever organization provided the public key used to verify
+	a record.  The user should check this domain name to verify that
+	it belongs to a trusted organization.
+    </UL>
 
     <H2>3.0 Privacy</H2>
   <P>

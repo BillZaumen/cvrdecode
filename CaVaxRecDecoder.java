@@ -24,6 +24,7 @@ import java.security.spec.InvalidParameterSpecException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -47,6 +48,7 @@ import javax.swing.JPanel;
 import org.bzdev.io.CSVWriter;
 import org.bzdev.io.AppendableWriter;
 import org.bzdev.swing.SimpleConsole;
+import org.bzdev.swing.DarkmodeMonitor;
 import org.bzdev.swing.InputTablePane;
 import org.bzdev.util.JSOps;
 import org.bzdev.util.JSArray;
@@ -190,14 +192,23 @@ public class CaVaxRecDecoder {
 			       "FV4AsWjc7ZmfhSiHsw2gjnDMKNLwNqi2jMLmJpiKWtE"));
     }
 
-    static void loadKeys() {
-	// load the keys from the CA DPH web site.  This will be called
-	// if a key does not match a built-in key and if this method
-	// has not been called previously.
+    static Map<String,Integer> knownISS = new LinkedHashMap<String,Integer>();
+    static int issCount = 0;
+
+    static void loadKeys(String iss) {
+	// load the keys, by default from the CA DPH web site.
+	// This will be called at most once for each value of iss.
 	try {
-	    URL url = new URL
-		("https://myvaccinerecord.cdph.ca.gov/"
-		 + "creds/.well-known/jwks.json");
+	    if (iss != null && iss.endsWith("/")) {
+		iss = iss.substring(0, iss.length()-1);
+	    }
+	    String urlString = ((iss == null)?
+				"https://myvaccinerecord.cdph.ca.gov/creds":
+				iss)
+		+ "/.well-known/jwks.json";
+
+
+	    URL url = new URL(urlString);
 	    InputStream is = url.openStream();
 	    Object obj = JSUtilities.JSON.parse(is, "UTF-8");
 	    if (obj instanceof JSObject) {
@@ -220,6 +231,7 @@ public class CaVaxRecDecoder {
 		    }
 		}
 	    }
+	    knownISS.put(iss, ++issCount);
 	    needLoading = false;
 	} catch (Exception e) {
 	    err.println("cvrdecode: could not load key(s): "
@@ -252,14 +264,14 @@ public class CaVaxRecDecoder {
 	return ival;
     }
 
-    static ECPublicKey getPublicKey(String kid)
+    static ECPublicKey getPublicKey(String iss, String kid)
 	throws NoSuchAlgorithmException, InvalidParameterSpecException,
 	       InvalidKeySpecException, NoSuchProviderException,
 	       IllegalArgumentException
     {
 	KeyInfo info = keymap.get(kid);
-	if (info == null && needLoading) {
-	    loadKeys();
+	if (info == null && !knownISS.containsKey(iss)) {
+	    loadKeys(iss);
 	    info = keymap.get(kid);
 	}
 	if (info == null) throw new IllegalArgumentException("unknown key ID");
@@ -340,6 +352,16 @@ public class CaVaxRecDecoder {
     private static void printInfo(JSOps info, int depth) {
 	// Recursive function to walk through a tree and pretty print it.
 	if (info instanceof JSObject) {
+	    if (depth == 0) {
+		JSObject object = (JSObject) info;
+		Object issObject = object.get("iss");
+		iss = (issObject instanceof String)? (String) issObject: null;
+		if (iss == null) {
+		    throw new IllegalStateException("iss = "
+						    + issObject
+						    + " not expected");
+		}
+	    }
 	    for (Map.Entry<String,Object> entry: ((JSObject) info).entrySet()) {
 		for (int i = 0; i < depth; i++) {
 		    System.out.print(" ");
@@ -388,6 +410,9 @@ public class CaVaxRecDecoder {
     }
 
 
+    static String iss = null;
+    static String kid = null;
+    static int issIndex = 0;
     static String familyName = null;
     static String givenNames = null;
     static String birthDate = null;
@@ -468,6 +493,16 @@ public class CaVaxRecDecoder {
 	valid = false;
 	full = false;
 	Object object = JSUtilities.JSON.parse(contents);
+	if (object instanceof JSObject) {
+	    JSObject obj = (JSObject) object;
+	    Object issObject = obj.get("iss");
+	    iss = (issObject instanceof String)? (String) issObject: null;
+	    if (iss == null) {
+		throw new IllegalStateException("iss = "
+						+ issObject
+						+ " not expected");
+	    }
+	}
 	if (object instanceof JSOps) {
 	    processInfo((JSOps) object);
 	} else {
@@ -492,6 +527,8 @@ public class CaVaxRecDecoder {
 
 
     private static void startGUI() throws Exception {
+	DarkmodeMonitor.setSystemPLAF();
+	DarkmodeMonitor.init();
 	monitor = new Object();
 	SwingUtilities.invokeLater(() -> {
 		java.util.List<Image> iconList = new LinkedList<Image>();
@@ -926,11 +963,19 @@ public class CaVaxRecDecoder {
 		    zis.closeEntry();
 		    continue;
 		}
+		// String doseString = full? "true (" + occurrence.size() + ")":
+		//    "false";
+		String doseString = full? "true": "false";
+		int osize = occurrence.size();
+		if (full && dosesNeeded < osize) {
+		    doseString = doseString + " (" + osize + ")";
+		}
 		String[] row = {familyName, givenNames, birthDate,
 		    (latest == null)? "[no date]": latest.toString(),
-		    full? "true": "false",
+		    doseString,
 		    valid? "true": "false",
-		    "zip: " + arg
+		    ((issIndex == 0)? "": "[" + issIndex + "] ")
+		    + "zip: " + arg
 		};
 		list.add(row);
 		zis.closeEntry();
@@ -1022,11 +1067,19 @@ public class CaVaxRecDecoder {
 		}
 
 		if (showJSON == false) {
+		    // String doseString = full?
+		    //    "true (" + occurrence.size() + ")": "false";
+		    String doseString = full? "true": "false";
+		    int osize = occurrence.size();
+		    if (full && dosesNeeded < osize) {
+			doseString = doseString + " (" + osize + ")";
+		    }
 		    String[] row = {familyName, givenNames, birthDate,
 			(latest == null)? "[no date]": latest.toString(),
-			full? "true": "false",
+			doseString,
 			valid? "true": "false",
-			(guimode? new File(arg).getName(): arg)
+			((issIndex == 0)? "": "[" + issIndex + "] ")
+			+ (guimode? new File(arg).getName(): arg)
 		    };
 		    list.add(row);
 		}
@@ -1053,6 +1106,36 @@ public class CaVaxRecDecoder {
 		}
 		w.writeRow(row[0], row[1], row[2], row[3],
 			   row[4], row[5], row[6]);
+	    }
+	    if (knownISS.size() > 0) {
+		if (guimode) {
+		    Vector<Object> tblrow = new Vector<Object>(7);
+		    for (int i = 0; i < 7; i++) {
+			tblrow.add("");
+		    }
+		    tableRows.add(tblrow);
+		    for (Map.Entry<String,Integer> entry: knownISS.entrySet()) {
+			int index = entry.getValue();
+			String name = entry.getKey().substring(8);
+			int ind = name.indexOf("/");
+			name = (ind == -1)? name: name.substring(0, ind);
+			tblrow = new Vector<Object>(7);
+			for (int i = 0; i < 7 - 2; i++) {
+			    tblrow.add("");
+			}
+			tblrow.add("[" + index + "]");
+			tblrow.add(name);
+			tableRows.add(tblrow);
+		    }
+		}
+		w.writeRow("", "", "", "", "", "", "");
+		for (Map.Entry<String,Integer> entry: knownISS.entrySet()) {
+		    int index = entry.getValue();
+		    String name = entry.getKey().substring(8);
+		    int ind = name.indexOf("/");
+		    name = (ind == -1)? name: name.substring(0, ind);
+		    w.writeRow( "", "", "", "", "", "[" + index + "]", name);
+		}
 	    }
 	    w.flush();
 	    w.close();
@@ -1114,6 +1197,9 @@ public class CaVaxRecDecoder {
 	    w.close();
 	    data = os.toByteArray();
 	}
+	iss = null;
+	kid = null;
+	issIndex = 0;
 	for (int i = 0; i < components.length; i++) {
 	    byte[] bytes = Base64.getUrlDecoder().decode(components[i]);
 	    if (i == 0) {
@@ -1132,10 +1218,9 @@ public class CaVaxRecDecoder {
 							+ " not expected");
 			
 		    }
-		    key = getPublicKey((String)obj.get("kid"));
-		    if (key == null) {
-			throw new IllegalStateException("no key for kid = "
-							+ obj.get("kid"));
+		    kid = (String)obj.get("kid");
+		    if (kid == null) {
+			throw new IllegalStateException("no key ID");
 		    }
 		}
 	    } else if (i == 1) {
@@ -1146,11 +1231,27 @@ public class CaVaxRecDecoder {
 		bytes = new byte[8192];
 		int len = infl.inflate(bytes);
 		String json = new String(bytes, 0, len, "UTF-8");
+		// System.out.println("json = " + json);
 		if (showJSON) {
 		    printInfo(json);
+		    key = getPublicKey(iss, kid);
+		    if (key == null) {
+			throw new IllegalStateException("no key for kid = "
+							+ kid
+							+ ", iss = " + iss);
+		    }
 		    continue;
 		}
 		processInfo(json);
+		key = getPublicKey(iss, kid);
+		if (key == null) {
+		    throw new IllegalStateException("no key for kid = "
+						    + kid
+						    + ", iss = " + iss);
+		}
+		if (knownISS.containsKey(iss))  {
+		    issIndex = knownISS.get(iss);
+		}
 		latest = null;
 		if (dosesNeeded > 0 && occurrence.size() > 0) {
 		    latest = occurrence.get(0);
@@ -1169,6 +1270,7 @@ public class CaVaxRecDecoder {
 		    } else {
 			System.out.println(".......... NOT VALID");
 		    }
+		    System.out.println("(" + iss + ")");
 		}
 	    }
 	}

@@ -1,8 +1,18 @@
+cvrdecode (1.1) unstable; urgency=low
+
+  * Switched to the system look and feel. Added the ability to download
+    public keys from multiple sources and updated the tables to show that
+    information. When booster vaccinations occur, the number of
+    vaccinations is displayed.
+
+ --  Bill Zaumen <bill.zaumen@gmail.com>  Mon, 07 Mar 2022 21:04:00 -0700
+
 cvrdecode (1.0) unstable; urgency=low
 
   * First complete version.
 
  --  Bill Zaumen <bill.zaumen@gmail.com>  Wed, 04 Aug 2021 21:18:00 -0700
+
 cvrdecode (0.5) unstable; urgency=low
 
   * Created the initial version and a man page.

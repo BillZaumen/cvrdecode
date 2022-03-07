@@ -14,4 +14,12 @@ Description: Utility that processes QR codes and  shc URIs
  list, each row of which contains a family name, given
  names, a birthdate, the last vaccination date, and boolean
  values indicating that the owner of the record has been
- fully vaccinated and that the signature was valid.
+ fully vaccinated and that the signature was valid. The
+ fully-vaccinated boolean value is followed by the number
+ of vaccinations in parentheses.  A final value provides
+ a name (typically a file name or ZIP-file entry) that
+ used as a reference.  This reference may be prefaced with
+ a number in square brackets to indicate where the public
+ key used to validate a record came from.  A short table
+ at the very end of the file shows the host names
+ corresponding to these numbers.
