@@ -1,4 +1,4 @@
-VERSION = 1.1
+VERSION = 1.2
 
 LIBS = libbzdev-base.jar libbzdev-ejws.jar libbzdev.jar cvrdecode.jar \
 	javase.jar core.jar
@@ -56,3 +56,4 @@ libs: $(LIBS)
 
 clean:
 	rm $(LIBS) server.jar
+	rm server/classes/*

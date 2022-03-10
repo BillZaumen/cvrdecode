@@ -3,6 +3,7 @@
 /cvrdecode.jar
 /cvrdecode_*.deb
 /inst/cvrdecode-install.jar
+/cvrdecode-install-*.jar
 *~
 *.shc
 *.csv

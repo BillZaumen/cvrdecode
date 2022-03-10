@@ -36,7 +36,9 @@ public class Adapter implements ServletAdapter {
 	} catch (Exception e) {}
     }
     
-    public void doPost(HttpServerRequest req, HttpServerResponse res) {
+    public void doPost(HttpServerRequest req, HttpServerResponse res)
+	throws IOException
+    {
 	InputStream is = req.getDecodedInputStream();
 	String ctype = req.getMediaType();
 	if (ctype.equalsIgnoreCase("multipart/form-data")) {

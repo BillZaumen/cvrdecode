@@ -159,62 +159,52 @@
   <P>
     For Linux systems that use the freedesktop.org standards but that are
     not Debian systems, the package <CODE>alien</CODE> can be used to
-    convert Debian packages to other formats.  The Debian packages that
-    are not available as RPM packages can
-    be downloaded by using the commands
-    <BLOCKQUOTE><CODE><PRE>
+    convert Debian packages to other formats.  The packages
+    libjcommander-java, libzxing-java, libzxing-core-java, and
+    libzxing-javase-java should have equivalent RPM packages and do not
+    have to be converted.  Otherwise the packages
+    <UL>
+      <LI> libbzdev-base-java
+      <LI> libbzdev-math-java
+      <LI> libbzdev-obnaming-java
+      <LI> libbzdev-graphics-java
+      <LI> libbzdev-desktop-java
+      <LI> cvrdecode
+    </UL>
+    can be downloaded by using the links provided on
+    <A HREF="https://billzaumen.github.io/bzdev/packages.html">
+      a list of packages</A> (names of the downloaded files will
+    contain version numbers in addition to package names). After
+    downloading these Debian files, <CODE>alien</CODE> can convert
+    them to a different format (e.g., rpm).
 
-  sudo apt-get download libbzdev-base-java
-  sudo apt-get download libbzdev-math-java
-  sudo apt-get download libbzdev-obnaming-java
-  sudo apt-get download libbzdev-graphics-java
-  sudo apt-get download libbzdev-desktop-java
-  sudo apt-get download cvrdecode
-    </PRE></CODE></BLOCKQUOTE>
-  <P>
-    After downloading these Debian files <CODE>alien</CODE> can convert them
-    to a different format (e.g., rpm).
-
-    <H2><A NAME="java">Installing using cvrdecode-install.jar</A></H2>
+    <H2><A NAME="java">Installing using cvrdecode-install-VERSION.jar</A></H2>
   <P>
     An installer is also  available and can be used on a variety of systems
-    including MacOS and Windows. Please download
-    <A HREF="https://drive.google.com/file/d/1fYYFez7FNsdsLaKOjtsgqiOymfepSKOU/view?usp=sharing" TARGET="_blank">cvrdecode-install.jar</A>.
-    This is a Google Drive link. It may display a download button near
-    the upper-left of the screen. When pressed, you may see a blank
-    window for a few seconds. Then it will ask you what to do.  You
-    should save the file instead of running it (the link is not to an
-    executable file).  If you see a 'spinning' icon in the center of
-    the screen, look for the download button and push it. The download link
-    should appear in a separate tab or window.
-  <P>
-    For security, run a command that will generate a SHA-256 digest:
-    <BLOCKQUOTE><CODE><PRE>
-
-  shasum -a 256 cvrdecode-install.jar
-    </PRE></CODE></BLOCKQUOTE>
-    from the <EM>download</EM> directory. The digest printed by this
-    command should be
-    <BLOCKQUOTE><CODE><PRE>
-
-  6e4900c35c876818cbacb081b8174a761dd14bd3abd84804088d0b76bedc2592
-    </PRE></CODE></BLOCKQUOTE>
-    if the correct file was downloaded.
+    including MacOS and Windows. The installer is named
+    <CODE>cvrdecode-install-VERSION.java</CODE> where <CODE>VERSION</CODE>
+    is the latest version number. Please visit
+    <A HREF="https://billzaumen.github.io/bzdev/installers.html">
+      https://billzaumen.github.io/bzdev/installers.html</A> and click
+    on the <CODE>cvrdecode</CODE> link.  A SHA 256 message digest for this
+    JAR file is included on that web page.
   <P>
     Java 11 (or later) must be installed before the installer can
     be used. To start the installer, run the command
     <BLOCKQUOTE><CODE><PRE>
 
-  sudo java -jar cvrdecode-install.jar
-    </PRE></CODE></BLOCKQUOTE>
-    and an installer start that will provide you with several installation
-    options. These options let you pick the location where the software
-    will be installed (generally used standard locations are shown). If
+  sudo java -jar cvrdecode-install-VERSION.jar
+    </PRE></CODE></BLOCKQUOTE> and an installer that will provide you
+    with several installation options will start. These options let
+    you pick the location where the software will be installed
+    (generally used standard locations are shown). If
     <STRONG>sudo</STRONG> is not available, use whatever procedure grants
     you the privileges needed to install software.  If the
     <STRONG>dry run</STRONG> option is checked, the installer will
     open a dialog box with a text field containing the corresponding
-    command to enter in a terminal window given the options that were selected.
+    command to enter in a terminal window given the options that were
+    selected.  This is useful when installing the software on multiple
+    systems accessed via SSH.
   <P>
     The command
     <BLOCKQUOTE><CODE><PRE>
@@ -240,8 +230,9 @@
     <CODE>apt-get install cvrdecode</CODE> will perform are to
     <OL>
       <LI> copy cvrdecode.desktop to an appropriate location.
-      <LI> copy icons to the appropriate locations (the  icons will
-	be stored in a ZIP file named <CODE>share.zip</CODE>).
+      <LI> copy icons to the appropriate locations (the icons will be
+	stored by the installer in a ZIP file
+	named <CODE>share.zip</CODE>).
       <LI> run the command
 	<BLOCKQUOTE><CODE><PRE>
 
@@ -250,8 +241,6 @@
 	in order to make the icons accessible without needing to
 	reboot.
     </OL>
-    While easy, these steps still have to be tested, which
-    requires access to systems the author does not have available.
 </BODY>
 </HTML>
 
@@ -259,5 +248,7 @@
  -->
 <!--  LocalWords:  flatpak libbzdev sudo dryrun rootdir freedesktop
  -->
-<!--  LocalWords:  Flathub flathub MacOS
+<!--  LocalWords:  Flathub flathub MacOS libjcommander libzxing
+ -->
+<!--  LocalWords:  javase obnaming
  -->

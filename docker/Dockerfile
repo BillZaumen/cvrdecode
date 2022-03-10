@@ -1,4 +1,4 @@
-FROM openjdk:11.0.12-jre
+FROM openjdk:11.0.14-jre
 
 COPY . /usr/app
 
