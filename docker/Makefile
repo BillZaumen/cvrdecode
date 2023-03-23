@@ -9,7 +9,6 @@ server.jar: $(LIBS) server/server.mf server/Server.java server/webpage.html \
 
 docker: server.jar
 	docker build --tag wtzbzdev/cvrdecode:$(VERSION) .
-
 #
 # Version to push if the latest version is being updated.
 # must be logged into Docker Hub.
@@ -53,6 +52,7 @@ core.jar: /usr/share/java/core.jar
 
 
 libs: $(LIBS)
+
 
 clean:
 	rm $(LIBS) server.jar

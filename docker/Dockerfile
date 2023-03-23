@@ -1,4 +1,4 @@
-FROM openjdk:11.0.14-jre
+FROM eclipse-temurin:11.0.18_10-jre-jammy
 
 COPY . /usr/app
 
