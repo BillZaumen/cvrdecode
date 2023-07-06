@@ -7,7 +7,7 @@
 # * make superclean - to clean up and remove the JAR file
 
 
-VERSION = 1.1
+VERSION = 1.2
 
 DATE = $(shell date -R)
 
@@ -50,7 +50,8 @@ all: cvrdecode.jar $(DEB) cvrdecode-install-$(VERSION).jar
 
 cvrdecode.jar: CaVaxRecDecoder.java
 	mkdir -p classes
-	javac -Xlint:unchecked -d classes -classpath $(CP) CaVaxRecDecoder.java
+	javac --release 11 -d classes -classpath $(CP) \
+		CaVaxRecDecoder.java
 	for i in $(ICON_WIDTHS) ; do \
 		inkscape -w $$i \
 		--export-filename=classes/cvrdecode$${i}.png \
