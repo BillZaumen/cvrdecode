@@ -1,3 +1,10 @@
+cvrdecode (1.4) unstable; urgency=low
+
+  * Modified error messages, added new vaccine codes, and now ignores
+    unrecognized vaccine codes when determining vaccination dates.
+
+ --  Bill Zaumen <bill.zaumen@gmail.com>  Mon, 07 Mar 2022 21:04:00 -0700
+
 cvrdecode (1.1) unstable; urgency=low
 
   * Switched to the system look and feel. Added the ability to download

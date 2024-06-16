@@ -1,4 +1,4 @@
-VERSION = 1.2
+VERSION = 1.4
 
 LIBS = libbzdev-base.jar libbzdev-ejws.jar libbzdev.jar cvrdecode.jar \
 	javase.jar core.jar

@@ -251,6 +251,13 @@ public class CaVaxRecDecoder {
 	vmap.put("210", 2);	// AstraZeneca
 	vmap.put("211", 2);	// Novavax
 	vmap.put("212", 1);	// Jansen (J&J)
+	vmap.put("213", 1);	// unspecified
+	vmap.put("229", 1);	// Moderna
+	vmap.put("308", 1);	// Pfizer
+	vmap.put("310", 1);	// Pfizer
+	vmap.put("311", 1);	// Moderna
+	vmap.put("312", 1);	// Moderna
+	vmap.put("313", 1);	// Noravax
     }
 
     static int neededDoses(String system, String code) {
@@ -461,9 +468,17 @@ public class CaVaxRecDecoder {
 							   String.class),
 						  vobj.get("code",
 							   String.class));
-			occurrence.add(LocalDate
-				       .parse(object.get("occurrenceDateTime",
-							 String.class)));
+			if (dosesNeeded == -1) {
+			    System.err.println("Warning: cannot recognize "
+					       + "vaccine code "
+					       + vobj.get("code",
+							  String.class));
+			} else {
+			    occurrence.add(LocalDate
+					   .parse(object
+						  .get("occurrenceDateTime",
+						       String.class)));
+			}
 		    }
 		}
 	    }

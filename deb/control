@@ -3,7 +3,7 @@ Version: VERSION
 Section: contrib/utils
 Priority: optional
 Architecture: all
-Depends: default-jdk, libbzdev-java (>= 1.3.7), libzxing-core-java (>= 3.4.1), libzxing-java (>= 3.4.1), libzxing-javase-java (>=3.4.1)
+Depends: default-jdk, libbzdev-java (>= 2.1.65), libzxing-core-java (>= 3.4.1), libzxing-java (>= 3.4.1), libzxing-javase-java (>=3.4.1)
 Maintainer: Bill Zaumen <bill.zaumen+software@gmail.com>
 Description: Utility that processes QR codes and  shc URIs
  provided by the California Department of Public Health as

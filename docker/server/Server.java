@@ -21,7 +21,7 @@ public class Server {
 	    InetAddress.getByName(s);
 
 	EmbeddedWebServer ews = new
-	    EmbeddedWebServer(addr,port, backlog, nthreads, null);
+	    EmbeddedWebServer(addr,port, backlog, nthreads);
 
 	ews.add("/", ResourceWebMap.class, "/", null, true, false, true);
 
